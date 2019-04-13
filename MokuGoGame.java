@@ -5,7 +5,14 @@ public class MokuGoGame{
 	private static final int MOKU = 0;
 	private static final int boardSize = 15;
 
-	private int[][] boardVal; //-1 for null, 0 for moku, 1 for opponent
+	private int[] mokuRowNum;
+	private int[] mokuRangeNum;
+	private int[] mokuDiagNum;
+	private int[] oppoRowNum;
+	private int[] oppoRangeNum;
+	private int[] oppoDiagNum;
+
+	private int[][] boardVal; //-1 for null, 1 for opponent, 0 for moku
 	private final String oppoName;
 	private int oppoFinalScore;
 	prisvate int gameState; //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
@@ -16,6 +23,13 @@ public class MokuGoGame{
 		this.gameState = 3;
 		this.boardVal = new int[boardSize][boardSize];
 		Arrays.fill(this.boardVal, -1);
+
+		this.mokuRowNum = new int[boardSize];
+		this.mokuRangeNum = new int[boardSize];
+		this.mokuDiagNum = new int[2*boardSize-1];
+		this.oppoRowNum = new int[boardSize];
+		this.oppoRangeNum = new int[boardSize];
+		this.oppoDiagNum = new int[2*boardSize-1];
 	}
 
 	public String getOppoName(){
@@ -30,6 +44,26 @@ public class MokuGoGame{
 		return gameState;
 	}
 
+	public int getBoardVal(int row, int range){
+		return boardVal[row][range];
+	}
 
+	public viod setBoardVal(int row, int range, int player){
+		boardVal[row][range] = player;
+		updatePlayerNum(player);
+	}
+
+	public void updatePlayerNum(int player){
+
+	}
+
+	public int countConsec(int[] consec){
+
+	}
+
+	public int[] getMokuChoice(){
+		int[] coord = getMCTS();
+		return coord;
+	}
 	
 }

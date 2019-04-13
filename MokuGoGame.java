@@ -8,7 +8,7 @@ public class MokuGoGame{
 	private int[][] boardVal; //-1 for null, 0 for moku, 1 for opponent
 	private final String oppoName;
 	private int oppoFinalScore;
-	prisvate int gameState; //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
+	private int gameState; //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
 
 	public MokuGoGame(String oppoName){
 		this.oppoName = oppoName;

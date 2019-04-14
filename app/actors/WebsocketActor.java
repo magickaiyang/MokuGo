@@ -23,7 +23,7 @@ public class WebsocketActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(JsonNode.class, json -> {
-                            out.tell("I received your message: " + json, self());
+                            out.tell("I received your message: " + json.toString(), self());
                         }
                 )
                 .build();

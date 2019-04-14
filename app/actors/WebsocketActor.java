@@ -12,7 +12,7 @@ public class WebsocketActor extends AbstractActor {
         public int color;
         public Position pos;
 
-        private static class Position {
+        public static class Position {
             public int x;
             public int y;
         }

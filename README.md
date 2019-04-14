@@ -14,6 +14,6 @@ Play Gomoku with an algorithm that is unbeatable, and compete for positions on t
 
 ### Technologies and Servieces Utilized
 * A HTML5 and JavaScript Frontend, with the framework TBD.
-* A Python backend to calculate the computer's move by Monte Carlo Tree Search.
+* A Java backend to calculate the computer's move by MiniMax algorithm with Alpha-beta Pruning.
 * A database is used to maintain a leaderboard.
 * The application is hosted on Heroku.

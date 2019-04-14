@@ -1,11 +1,11 @@
 public class Tuple{
-	public int x;
-	public int y;
+	public int[] coord;
 	public double score;
 
 	public Tuple(int x, int y, double score){
-		this.x = x;
-		this.y = y;
+		this.coord = new int[2];
+		this.coord[0] = x;
+		this.coord[1] = y;
 		this.score = score;
 	}
 

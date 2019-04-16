@@ -1,0 +1,10 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+
+# An asset controller to show home page
+GET  /              controllers.Assets.at(path="/public", file="index.html")
+
+# Other assets (css,js)
+GET  /assets/*file         controllers.Assets.at(path="/public", file)
+
+GET  /ws            controllers.WebsocketController.socket

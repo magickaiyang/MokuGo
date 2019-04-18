@@ -8,7 +8,42 @@ var rankList = [
 		"3.Bob",
 		"4.Bruce"
 ];
-        
+
+//send and get json
+var webSocket = new WebSocket('wss://mokugo.herokuapp.com/ws');
+
+//send json package
+function sendText(x, y, status, color) {
+  // Construct a msg object containing the data the server needs to process the message from the chat client.
+  var msg = {
+    "pos": {"x": x, "y": y},
+		"status" : status,
+		"color": color
+  };
+
+  // Send the msg object as a JSON-formatted string.
+  webSocket.send(JSON.stringify(msg));
+}
+
+//listen from server
+webSocket.onmessage = function(event) {
+  	console.log(event.data);
+		var msg = JSON.parse(event.data);
+		var status = msg.status;
+		var color = msg.color;
+		var x = msg.pos.x;
+		var y = msg.pos.y;
+		oneStep(x , y , me);
+		if(!over){
+			me = !me;
+		}
+};
+
+
+
+
+
+
 // Initialize chessBoard
 for(var i=0 ; i<15 ; i++){
 	chessBoard[i] = [];
@@ -75,6 +110,9 @@ chess.onclick = function(e){
 	if(chessBoard[i][j] == 0){
 		oneStep(i , j , me);
 		chessBoard[i][j] = 1;//me
+		//send json to server
+		sendText(i, j, 0, 1);
+
 		if(!over){
 			me = !me;
 		}

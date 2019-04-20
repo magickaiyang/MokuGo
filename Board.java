@@ -1,5 +1,6 @@
 //extracted from https://github.com/canberkakcali/gomoku-ai-minimax
 //04/14/2019
+import java.util.ArrayList;
 
 public class Board {
 

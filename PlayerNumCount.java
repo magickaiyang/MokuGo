@@ -11,9 +11,9 @@ public class PlayerNumCount {
 
 	public PlayerNumCount(String playerName, int boardSize) {
 		this.playerName = playerName;
-		this.rowNum = new ArrayList<Integer>(boardSize);
-		this.ranegNum = new ArrayList<Integer>(boardSize);
-		this.leftDiagNum = new ArrayList<Integer>(2 * boardSize - 1);
-		this.rightDiagNum = new ArrayList<Integer>(2 * boardSize - 1);
+		this.rowNum = new ArrayList<Integer>(Collections.nCopies(boardSize, 0)); //initialize with all zeros
+		this.rangeNum = new ArrayList<Integer>(Collections.nCopies(boardSize, 0));
+		this.leftDiagNum = new ArrayList<Integer>(Collections.nCopies(2 * boardSize - 1, 0));
+		this.rightDiagNum = new ArrayList<Integer>(Collections.nCopies(2 * boardSize - 1, 0));
 	}
 }

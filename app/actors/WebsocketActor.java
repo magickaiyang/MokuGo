@@ -39,7 +39,6 @@ public class WebsocketActor extends AbstractActor {
                         System.out.println("status:" + p.status + " position x:" + p.pos.x);
 
                         //place user's counter
-                        p.pos = new Packet.Position();
                         m.setBoardVal(p.pos.y, p.pos.x, 1); //1 for opponent, the backend does NOT check if the row/range is legal
 
                         //get response of moku AI (counter already placed)

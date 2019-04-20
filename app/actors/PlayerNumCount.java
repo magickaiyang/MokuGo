@@ -1,4 +1,4 @@
-package actors;
+package app.actors;
 
 import java.util.Arrays;
 import java.util.Collections;

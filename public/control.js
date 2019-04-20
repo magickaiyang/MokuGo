@@ -1,13 +1,15 @@
 var chessBoard = [];//chess board
-var me = true; //user
+var me = true; //user move
 var over = false; // game over or not
-var username;
-var rankList = [
-		"1.Mike",
-		"2.John",
-		"3.Bob",
-		"4.Bruce"
-];
+var clickForbidden = false;
+
+// Initialize chessBoard
+for(var i=0 ; i<15 ; i++){
+	chessBoard[i] = [];
+	for(var j=0 ; j<15 ; j++){
+		chessBoard[i][j] = 0;
+    }
+}
 
 //send and get json
 var webSocket = new WebSocket('wss://mokugo.herokuapp.com/ws');
@@ -33,24 +35,33 @@ webSocket.onmessage = function(event) {
 		var color = msg.color;
 		var x = msg.pos.x;
 		var y = msg.pos.y;
-		oneStep(x , y , me);
+		if (status == 1) {
+				//user win
+				alert("You win!");
+				over = true;
+		}
+		else if (status == 2){
+				//computer win
+				if (chessBoard[x][y] == 0) {
+						chessBoard[x][y] = 1;
+						oneStep(x , y , me);
+				}		
+				alert("The computer wins!");
+				over = true;
+		}
+		else{
+				if (chessBoard[x][y] == 0) {
+						chessBoard[x][y] = 1;
+						oneStep(x , y , me);
+				}		
+		}
 		if(!over){
-			me = !me;
+				me = !me;
+		}
+		else{
+				clickForbidden = true;
 		}
 };
-
-
-
-
-
-
-// Initialize chessBoard
-for(var i=0 ; i<15 ; i++){
-	chessBoard[i] = [];
-	for(var j=0 ; j<15 ; j++){
-		chessBoard[i][j] = 0;
-    }
-}
  
 var chess = document.getElementById('chess');
 var context = chess.getContext('2d');
@@ -64,25 +75,31 @@ document.getElementById("restart").onclick = function(){
 document.getElementById("rank").onclick = function(){
 	window.location.href = "rank.html";
 }
-
-
-var begin = function(){
-    username = document.getElementById("username").value;
-    console.log(username);
-}
  
-//draw the board
+//draw the board when onload
 var drawChessBoard = function(){
-	for(var i=0 ; i<15 ; i++){
-		context.moveTo(15 + i*30 , 15);
-		context.lineTo(15 + i*30 , 435);
-		context.stroke();
-		context.moveTo(15 , 15 + i*30);
-		context.lineTo(435 , 15 + i*30);
-		context.stroke();
-	}
+		for(var i=0 ; i<15 ; i++){
+				context.moveTo(15 + i*30 , 15);
+				context.lineTo(15 + i*30 , 435);
+				context.stroke();
+				context.moveTo(15 , 15 + i*30);
+				context.lineTo(435 , 15 + i*30);
+				context.stroke();
+		}
+		var username =  window.location.search.substr(1);
+		var msg = {
+			"name" : username
+		};
+
+		console.log(username);
+		// Send the msg object as a JSON-formatted string.
+		webSocket.addEventListener('open', function () {
+			webSocket.send(JSON.stringify(msg))
+		});
+	
 }
  
+//One step when user click the board
 var oneStep = function(i , j , me){
 	context.beginPath();
 	context.arc(15 + i*30 , 15 + j*30 , 13 , 0 , 2 * Math.PI);
@@ -98,10 +115,11 @@ var oneStep = function(i , j , me){
 	context.fillStyle = gradient;
 	context.fill();
 }
- 
+
+//Click event
 chess.onclick = function(e){
 	if(over){
-		return;
+			return;
 	}
 	var x = e.offsetX;
 	var y = e.offsetY;
@@ -119,10 +137,3 @@ chess.onclick = function(e){
 	}
 }
 
-function insert()
-{
-		var data=rankList;
-		for (var i=0;i<data.length;i++){
-    	 document.getElementById("list").innerHTML+="<li>"+data[i]+"<\/li>"; 
-	  }
-}

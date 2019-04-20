@@ -6,6 +6,7 @@ import akka.actor.*;
 
 public class WebsocketActor extends AbstractActor {
     private final ActorRef out;
+    private MokuGoGame m;
 
     private static class Packet {
         public int status;
@@ -33,7 +34,6 @@ public class WebsocketActor extends AbstractActor {
                     System.out.println("Raw json: " + json.toString());
 
                     String name = json.findPath("name").textValue();    //test if it is a initial packet
-                    MokuGoGame m;
                     if (name == null) {
                         Packet p = Json.fromJson(json, Packet.class);
                         System.out.println("status:" + p.status + " position x:" + p.pos.x);
@@ -57,7 +57,7 @@ public class WebsocketActor extends AbstractActor {
                         System.out.println("New player name: " + name);
 
                         //create new game
-                        m = new MokuGoGame(name);
+                        this.m = new MokuGoGame(name);
 
                         //initialize first placement of moku
                         int firstX = 7;

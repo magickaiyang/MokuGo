@@ -8,3 +8,6 @@ GET  /              controllers.Assets.at(path="/public", file="index.html")
 GET  /assets/*file         controllers.Assets.at(path="/public", file)
 
 GET  /ws            controllers.WebsocketController.socket
+
+# show Leaderboard
+GET  /ldrbrd/:username        controllers.LeaderboardController.get(username: String)

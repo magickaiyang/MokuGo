@@ -1,3 +1,5 @@
+package actors;
+
 public class Tuple{
 	public int[] coord;
 	public double score;

@@ -1,7 +1,6 @@
-import java.awt.image.PackedColorModel;
-import java.util.Arrays;
+package actors;
+
 import java.util.Collections;
-import java.util.ArrayList;
 import java.lang.Math;
 import java.util.Scanner;
 
@@ -14,7 +13,7 @@ public class MokuGoGame {
 
 	private PlayerNumCount oppo;
 	private PlayerNumCount moku;
-	// private ArrayList<Tuple> availableMove;
+	// private ArrayList<actors.Tuple> availableMove;
 	private int[][] boardVal; //-1 for null, 1 for opponent, 0 for moku
 	private final String oppoName;
 	private int oppoFinalCount;
@@ -32,10 +31,10 @@ public class MokuGoGame {
 		 	}
 		 }
 
-		// this.availableMove = new ArrayList<Tuple>(boardSize * boardSize);
+		// this.availableMove = new ArrayList<actors.Tuple>(boardSize * boardSize);
 		// for (i = 0; i < boardSize; i++) {
 		// 	for (j = 0; i < boardSize; j++) {
-		// 		Tuple t = new Tuple(i, j, 0);
+		// 		actors.Tuple t = new actors.Tuple(i, j, 0);
 		// 		this.availableMove.add(t);
 		// 	}
 		// }
@@ -87,7 +86,7 @@ public class MokuGoGame {
 		}
 
 		boardVal[row][range] = -1;
-		// Tuple move = new Tuple(row, range, 0);
+		// actors.Tuple move = new actors.Tuple(row, range, 0);
 		// availableMove.add(move);
 		return true;
 	}
@@ -284,9 +283,9 @@ public class MokuGoGame {
 	// // minimax algorithm and alpha-beta pruning functions below are adopted from https://pats.cs.cf.ac.uk/@archive_file?p=525&n=final&f=1-1224795-final-report.pdf&SIG=a852f388b81ea43c0953ec0fb298084d16361371285eb9b836422360627fbd64
 	// private int[] getMove(int depth) {
 	// 	double curScore;
-	// 	Tuple bestMove;
+	// 	actors.Tuple bestMove;
 
-	// 	for (Tuple move : availableMove) {
+	// 	for (actors.Tuple move : availableMove) {
 	// 		setBoardVal(move.coord[0], move.coord[1], MOKU);
 
 	// 		curScore = mimimizeMove(depth, Integer.NEGATIVE_INFINITY, Integer.POSITIVE_INFINITY, move);
@@ -305,7 +304,7 @@ public class MokuGoGame {
 	// 	return bestMove.coord;
 	// }
 
-	// private double minimizeMove(int depth, double alpha, double beta, Tuple move) {
+	// private double minimizeMove(int depth, double alpha, double beta, actors.Tuple move) {
 	// 	if (depth == 0 || getGameState() != 0) {
 	// 		return getTotalScore()
 	// 	}
@@ -315,7 +314,7 @@ public class MokuGoGame {
 	// 	return result;
 	// }
 
-	// private double maximizeMove(int depth, double alpha, double beta, Tuple move) {
+	// private double maximizeMove(int depth, double alpha, double beta, actors.Tuple move) {
 	// 	double result;
 
 	// 	return result;

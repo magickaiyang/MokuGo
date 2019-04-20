@@ -40,15 +40,15 @@ public class WebsocketActor extends AbstractActor {
 
                         //place user's counter
                         p.pos = new Packet.Position();
-                        m.setBoardVal(p.pos.x, p.pos.y, 1); //1 for opponent, the backend does NOT check if the row/range is legal
+                        m.setBoardVal(p.pos.y, p.pos.x, 1); //1 for opponent, the backend does NOT check if the row/range is legal
 
                         //get response of moku AI (counter already placed)
                         Packet response=new Packet();
                         response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
                         response.pos=new Packet.Position();
                         int[] choice = m.getMokuChoice(3); //depth>0, proportional to AI smartnesss
-                        response.pos.x=choice[0];
-                        response.pos.y=choice[1];
+                        response.pos.x=choice[1];
+                        response.pos.y=choice[0];
                         response.color=0; //-1 for null, 1 for opponent, 0 for moku
 
                         JsonNode responseJson = Json.toJson(response);

@@ -33,25 +33,47 @@ public class WebsocketActor extends AbstractActor {
                     System.out.println("Raw json: " + json.toString());
 
                     String name = json.findPath("name").textValue();    //test if it is a initial packet
+                    MokuGoGame m;
                     if (name == null) {
                         Packet p = Json.fromJson(json, Packet.class);
                         System.out.println("status:" + p.status + " position x:" + p.pos.x);
 
-                        //call a method of MokuGoGame instance, pass "p", get a packet instance as return  value
-                        //Here we'll use a dummy for test purpose
+                        //place user's counter
+                        p.pos = new Packet.Position();
+                        m.setBoardVal(p.pos.x, p.pos.y, 1); //1 for opponent, the backend does NOT check if the row/range is legal
+
+                        //get response of moku AI (counter already placed)
                         Packet response=new Packet();
-                        response.status=0;
+                        response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
                         response.pos=new Packet.Position();
-                        response.pos.x=9;
-                        response.pos.y=13;
-                        response.color=0;
+                        int[] choice = m.getMokuChoice(3); //depth>0, proportional to AI smartnesss
+                        response.pos.x=choice[0];
+                        response.pos.y=choice[1];
+                        response.color=0; //-1 for null, 1 for opponent, 0 for moku
+
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());
                     } else {
                         System.out.println("New player name: " + name);
 
-                        //Create a new MokuGoGame class and pass the new player name...
-                        //call another method of MokuGoGame to put the FIRST black piece
+                        //create new game
+                        m = new MokuGoGame(name);
+
+                        //initialize first placement of moku
+                        int firstX = 7;
+                        int firstY = 7;
+                        m.setBoardVal(firstX,firstY,0); //-1 for null, 1 for opponent, 0 for moku
+
+                        //send back first placement of moku
+                        Packet response=new Packet();
+                        response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
+                        response.pos=new Packet.Position();
+                        response.pos.x=firstX;
+                        response.pos.y=firstY;
+                        response.color=0; //-1 for null, 1 for opponent, 0 for moku
+
+                        JsonNode responseJson = Json.toJson(response);
+                        out.tell(responseJson, self());
                     }
                 }
             )

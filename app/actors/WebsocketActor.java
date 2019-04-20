@@ -51,6 +51,7 @@ public class WebsocketActor extends AbstractActor {
                         response.pos.y=choice[0];
                         response.color=0; //-1 for null, 1 for opponent, 0 for moku
 
+                        System.out.println("computer res: x:" + response.pos.x + "y: "+response.pos.y);
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());
                     } else {

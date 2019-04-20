@@ -45,7 +45,7 @@ public class WebsocketActor extends AbstractActor {
                         Packet response=new Packet();
                         response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
                         response.pos=new Packet.Position();
-                        int[] choice = m.getMokuChoice(3); //depth>0, proportional to AI smartnesss
+                        int[] choice = m.getMokuChoice(10); //depth>0, proportional to AI smartnesss
                         response.pos.x=choice[1];
                         response.pos.y=choice[0];
                         response.color=0; //-1 for null, 1 for opponent, 0 for moku

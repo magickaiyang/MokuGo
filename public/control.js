@@ -73,7 +73,7 @@ document.getElementById("restart").onclick = function(){
 }
 
 document.getElementById("rank").onclick = function(){
-	window.location.href = "/assets/rank.html";
+	window.location.href = "rank.html";
 }
  
 //draw the board when onload

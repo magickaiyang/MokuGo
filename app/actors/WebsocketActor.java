@@ -4,9 +4,12 @@ import play.libs.Json;
 import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.*;
 
+import java.sql.*;
+
 public class WebsocketActor extends AbstractActor {
     private final ActorRef out;
     private MokuGoGame m;
+    private Connection conn;
 
     private static class Packet {
         public int status;
@@ -19,12 +22,19 @@ public class WebsocketActor extends AbstractActor {
         }
     }
 
-    public WebsocketActor(ActorRef out) {
+    public WebsocketActor(ActorRef out) throws SQLException{
         this.out = out;
+        System.out.println("Websocket constructor");
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        this.conn = DriverManager.getConnection(dbUrl);
     }
 
     public static Props props(ActorRef out) {
         return Props.create(WebsocketActor.class, out);
+    }
+
+    public void updateLeaderboard() {
+
     }
 
     @Override
@@ -50,13 +60,17 @@ public class WebsocketActor extends AbstractActor {
                         }else {
                             //get response of moku AI (counter already placed)
                             response.pos=new Packet.Position();
-                            int[] choice = m.getMokuChoice(3); //depth>0, proportional to AI smartnesss
+                            int[] choice = m.getMokuChoice(3); //depth>0, proportional to AI smartness
                             response.pos.x=choice[1];
                             response.pos.y=choice[0];
                             response.color=0; //-1 for null, 1 for opponent, 0 for moku
-                            response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
+                            response.status=m.getGameState(); //0 for continue, 1 for opponent win, 2 for moku win, 3 for tie
 
                             System.out.println("computer's move: x:" + response.pos.x + " y: " + response.pos.y);
+                        }
+
+                        if(response.status!=0) {    //game has ended, update leaderboard
+                            updateLeaderboard();
                         }
 
                         JsonNode responseJson = Json.toJson(response);

@@ -26,6 +26,8 @@ public class LeaderboardController extends Controller {
         }
 
         public Board() {
+            this.userscore=-1;
+            this.userrank=-1;
             this.rank = new Entry[10];
         }
     }

@@ -8,7 +8,7 @@ public class Minimax {
 	
 	public static int evaluationCount = 0;
 	private Board board;
-	private static final int winScore = 100000000;
+	private static final int winScore = 200000000; //100000000;
 	
 	
 	public Minimax(Board board) {
@@ -335,43 +335,87 @@ public class Minimax {
 		}
 		return score;
 	}
-	public static  int getConsecutiveSetScore(int count, int blocks, boolean currentTurn) {
-		final int winGuarantee = 1000000;
-		if(blocks == 2 && count < 5) return 0;
-		switch(count) {
-		case 5: {
-			return winScore;
-		}
-		case 4: {
-			if(currentTurn) return winGuarantee*50; //winGuarantee
-			else {
-				if(blocks == 0) return winGuarantee/50;  //winGuarantee/4
-				else return 200;
-			}
-		}
-		case 3: {
-			if(blocks == 0) {
-				if(currentTurn) return  winGuarantee*10; //50000;
-				else return 200;
-			}
-			else {
-				if(currentTurn) return 10;
-				else return 5;
-			}
-		}
-		case 2: {
-			if(blocks == 0) {
-				if(currentTurn) return 7;
-				else return 5;
-			}
-			else {
-				return 3;
-			}
-		}
-		case 1: {
-			return 1;
-		}
-		}
-		return winScore*2;
+	public static double getConsecutiveSetScore(int count, int blocks, boolean currentTurn) {
+		//reference: https://blog.theofekfoundation.org/artificial-intelligence/2015/12/11/minimax-for-gomoku-connect-five/
+
+        if (blocks == 0 && count < 5)
+            return 0;
+        switch (count) {
+            case 4:
+                switch (blocks) {
+                    case 1:
+                        if (currentTurn)
+                            return 100000000;
+                        return 50;
+                    case 2:
+                        if (currentTurn)
+                            return 100000000;
+                        return 500000;
+                }
+            case 3:
+                switch (blocks) {
+                    case 1:
+                        if (currentTurn)
+                            return 7;
+                        return 5;
+                    case 2:
+                        if (currentTurn)
+                            return 10000;
+                        return 50;
+                }
+            case 2:
+                switch (blocks) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 5;
+                }
+            case 1:
+                switch (blocks) {
+                    case 1:
+                        return 0.5;
+                    case 2:
+                        return 1;
+                }
+            default:
+                return winScore;
+        }
+//		final int winGuarantee = 1000000;
+//		if(blocks == 2 && count < 5) return 0;
+//		switch(count) {
+//		case 5: {
+//			return winScore;
+//		}
+//		case 4: {
+//			if(currentTurn) return winGuarantee; //winGuarantee
+//			else {
+//				if(blocks == 0) return winGuarantee/4;  //winGuarantee/4
+//				else return 200;
+//			}
+//		}
+//		case 3: {
+//			if(blocks == 0) {
+//				if(currentTurn) return  winGuarantee*10; //50000;
+//				else return 200;
+//			}
+//			else {
+//				if(currentTurn) return 10;
+//				else return 5;
+//			}
+//		}
+//		case 2: {
+//			if(blocks == 0) {
+//				if(currentTurn) return 7;
+//				else return 5;
+//			}
+//			else {
+//				return 3;
+//			}
+//		}
+//		case 1: {
+//			return 1;
+//		}
+//		}
+//		return winScore*2;
 	}
 }

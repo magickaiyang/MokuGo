@@ -9,3 +9,4 @@ scalaVersion := "2.12.8"
 
 libraryDependencies += guice
 libraryDependencies += "org.postgresql" % "postgresql" % "42.2.5"
+

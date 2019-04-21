@@ -8,7 +8,7 @@ public class Minimax {
 	
 	public static int evaluationCount = 0;
 	private Board board;
-	private static final int winScore = 100000000;
+	private static final int winScore = 200000000; //100000000;
 	
 	
 	public Minimax(Board board) {
@@ -48,7 +48,7 @@ public class Minimax {
 			System.out.println("Finisher!");
 			move[0] = (Integer)(bestMove[1]);
 			move[1] = (Integer)(bestMove[2]);
-			
+			System.out.printf("final kill: [%d, %d]\n", bestMove[1], bestMove[2]);
 		} else {
 			// If there is no such move, search the minimax tree with suggested depth.
 			bestMove = minimaxSearchAB(depth, board, true, -1.0, getWinScore());
@@ -158,10 +158,9 @@ public class Minimax {
 			// Create a temporary board that is equivalent to the current board
 			Board dummyBoard = new Board(board);
 			// Play the move to that temporary board without drawing anything
-			dummyBoard.addStoneNoGUI(move[1], move[0], false);
-			
+			dummyBoard.addStoneNoGUI(move[1], move[0], true); //dummyBoard.addStoneNoGUI(move[1], move[0], false);
 			// If the white player has a winning score in that temporary board, return the move.
-			if(getScore(dummyBoard,false,false) >= winScore) {
+			if(getScore(dummyBoard,true,true) >= winScore) { //			if(getScore(dummyBoard,false,false) >= winScore) {
 				winningMove[1] = move[0];
 				winningMove[2] = move[1];
 				return winningMove;
@@ -336,43 +335,87 @@ public class Minimax {
 		}
 		return score;
 	}
-	public static  int getConsecutiveSetScore(int count, int blocks, boolean currentTurn) {
-		final int winGuarantee = 1000000;
-		if(blocks == 2 && count < 5) return 0;
-		switch(count) {
-		case 5: {
-			return winScore;
-		}
-		case 4: {
-			if(currentTurn) return winGuarantee;
-			else {
-				if(blocks == 0) return winGuarantee/4;
-				else return 200;
-			}
-		}
-		case 3: {
-			if(blocks == 0) {
-				if(currentTurn) return 50000;
-				else return 200;
-			}
-			else {
-				if(currentTurn) return 10;
-				else return 5;
-			}
-		}
-		case 2: {
-			if(blocks == 0) {
-				if(currentTurn) return 7;
-				else return 5;
-			}
-			else {
-				return 3;
-			}
-		}
-		case 1: {
-			return 1;
-		}
-		}
-		return winScore*2;
+	public static double getConsecutiveSetScore(int count, int blocks, boolean currentTurn) {
+		//reference: https://blog.theofekfoundation.org/artificial-intelligence/2015/12/11/minimax-for-gomoku-connect-five/
+
+        if (blocks == 0 && count < 5)
+            return 0;
+        switch (count) {
+            case 4:
+                switch (blocks) {
+                    case 1:
+                        if (currentTurn)
+                            return 100000000;
+                        return 50;
+                    case 2:
+                        if (currentTurn)
+                            return 100000000;
+                        return 500000;
+                }
+            case 3:
+                switch (blocks) {
+                    case 1:
+                        if (currentTurn)
+                            return 7;
+                        return 5;
+                    case 2:
+                        if (currentTurn)
+                            return 10000;
+                        return 50;
+                }
+            case 2:
+                switch (blocks) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 5;
+                }
+            case 1:
+                switch (blocks) {
+                    case 1:
+                        return 0.5;
+                    case 2:
+                        return 1;
+                }
+            default:
+                return winScore;
+        }
+//		final int winGuarantee = 1000000;
+//		if(blocks == 2 && count < 5) return 0;
+//		switch(count) {
+//		case 5: {
+//			return winScore;
+//		}
+//		case 4: {
+//			if(currentTurn) return winGuarantee; //winGuarantee
+//			else {
+//				if(blocks == 0) return winGuarantee/4;  //winGuarantee/4
+//				else return 200;
+//			}
+//		}
+//		case 3: {
+//			if(blocks == 0) {
+//				if(currentTurn) return  winGuarantee*10; //50000;
+//				else return 200;
+//			}
+//			else {
+//				if(currentTurn) return 10;
+//				else return 5;
+//			}
+//		}
+//		case 2: {
+//			if(blocks == 0) {
+//				if(currentTurn) return 7;
+//				else return 5;
+//			}
+//			else {
+//				return 3;
+//			}
+//		}
+//		case 1: {
+//			return 1;
+//		}
+//		}
+//		return winScore*2;
 	}
 }

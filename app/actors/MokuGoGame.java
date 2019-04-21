@@ -251,16 +251,33 @@ public class MokuGoGame {
 
 			//Here we'll use a dummy for test purpose
 			Packet response=new Packet();
-			response.status=m.getGameState();
 			response.pos=new Packet.Position();
 			int[] choice = m.getMokuChoice(3); //depth=3
 			response.pos.x=choice[0];
 			response.pos.y=choice[1];
 			response.color=0;
+			response.status=m.getGameState();
 
 			System.out.printf("in: pos:[%d,%d], color:%d\n", in.pos.x, in.pos.y, in.color);
 			System.out.printf("out: status:%d, pos:[%d,%d], color:%d\n", response.status, response.pos.x, response.pos.y, response.color);
 			System.out.println("");
+
+			System.out.println("  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4");
+			for (int i = 0; i < boardSize; i++) {
+				int row=i;
+				if (i>9){
+					row = i-10;
+				}
+				System.out.printf("%d ", row);
+				for (int j = 0; j < boardSize; j++) {
+					if (m.getBoardVal(i,j)!=-1){
+						System.out.printf("%d ", m.getBoardVal(i,j));
+					}else{
+						System.out.print("  ");
+					}
+				}
+				System.out.println();
+			}
 		}
 
 		System.out.printf("final: status:%d, score:%d, name:%s\n", m.getGameState(), m.getOppoFinalCount(), m.getOppoName());

@@ -43,12 +43,12 @@ public class WebsocketActor extends AbstractActor {
 
                         //get response of moku AI (counter already placed)
                         Packet response=new Packet();
-                        response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
                         response.pos=new Packet.Position();
                         int[] choice = m.getMokuChoice(10); //depth>0, proportional to AI smartnesss
                         response.pos.x=choice[1];
                         response.pos.y=choice[0];
                         response.color=0; //-1 for null, 1 for opponent, 0 for moku
+                        response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
 
                         System.out.println("computer res: x:" + response.pos.x + "y: "+response.pos.y);
                         JsonNode responseJson = Json.toJson(response);
@@ -66,11 +66,11 @@ public class WebsocketActor extends AbstractActor {
 
                         //send back first placement of moku
                         Packet response=new Packet();
-                        response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
                         response.pos=new Packet.Position();
                         response.pos.x=firstX;
                         response.pos.y=firstY;
                         response.color=0; //-1 for null, 1 for opponent, 0 for moku
+                        response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
 
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());

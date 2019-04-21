@@ -48,7 +48,7 @@ public class Minimax {
 			System.out.println("Finisher!");
 			move[0] = (Integer)(bestMove[1]);
 			move[1] = (Integer)(bestMove[2]);
-			
+			System.out.printf("final kill: [%d, %d]\n", bestMove[1], bestMove[2]);
 		} else {
 			// If there is no such move, search the minimax tree with suggested depth.
 			bestMove = minimaxSearchAB(depth, board, true, -1.0, getWinScore());
@@ -158,10 +158,9 @@ public class Minimax {
 			// Create a temporary board that is equivalent to the current board
 			Board dummyBoard = new Board(board);
 			// Play the move to that temporary board without drawing anything
-			dummyBoard.addStoneNoGUI(move[1], move[0], false);
-			
+			dummyBoard.addStoneNoGUI(move[1], move[0], true); //dummyBoard.addStoneNoGUI(move[1], move[0], false);
 			// If the white player has a winning score in that temporary board, return the move.
-			if(getScore(dummyBoard,false,false) >= winScore) {
+			if(getScore(dummyBoard,true,true) >= winScore) { //			if(getScore(dummyBoard,false,false) >= winScore) {
 				winningMove[1] = move[0];
 				winningMove[2] = move[1];
 				return winningMove;
@@ -344,15 +343,15 @@ public class Minimax {
 			return winScore;
 		}
 		case 4: {
-			if(currentTurn) return winGuarantee;
+			if(currentTurn) return winGuarantee*50; //winGuarantee
 			else {
-				if(blocks == 0) return winGuarantee/4;
+				if(blocks == 0) return winGuarantee/50;  //winGuarantee/4
 				else return 200;
 			}
 		}
 		case 3: {
 			if(blocks == 0) {
-				if(currentTurn) return 50000;
+				if(currentTurn) return  winGuarantee*10; //50000;
 				else return 200;
 			}
 			else {

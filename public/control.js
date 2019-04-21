@@ -2,12 +2,25 @@ var chessBoard = [];//chess board
 var me = true; //user move
 var over = false; // game over or not
 var clickForbidden = false;
+var chess = document.getElementById('chess');
+var context = chess.getContext('2d');
+var username;
+ 
+context.strokeStyle = "#BFBFBF";
+ 
+document.getElementById("restart").onclick = function(){
+		window.location.reload();
+}
+
+document.getElementById("rank").onclick = function(){
+		window.location.href = 'rank.html?' + username;
+}
 
 // Initialize chessBoard
 for(var i=0 ; i<15 ; i++){
-	chessBoard[i] = [];
-	for(var j=0 ; j<15 ; j++){
-		chessBoard[i][j] = 0;
+		chessBoard[i] = [];
+		for(var j=0 ; j<15 ; j++){
+				chessBoard[i][j] = 0;
     }
 }
 
@@ -29,7 +42,11 @@ function sendText(x, y, status, color) {
 
 //listen from server
 webSocket.onmessage = function(event) {
-  	console.log(event.data);
+		console.log(event.data);
+		// if receiving a fake json package, just ignore it
+		if (String(event.data) == "\"keep-alive\""){
+				return;
+		}
 		var msg = JSON.parse(event.data);
 		var status = msg.status;
 		var color = msg.color;
@@ -45,7 +62,9 @@ webSocket.onmessage = function(event) {
 				if (chessBoard[x][y] == 0) {
 						chessBoard[x][y] = 1;
 						oneStep(x , y , me);
-				}		
+				}
+				//need to sleep
+				
 				alert("The computer wins!");
 				over = true;
 		}
@@ -53,7 +72,8 @@ webSocket.onmessage = function(event) {
 				if (chessBoard[x][y] == 0) {
 						chessBoard[x][y] = 1;
 						oneStep(x , y , me);
-				}		
+				}
+				clickForbidden = false;		
 		}
 		if(!over){
 				me = !me;
@@ -62,19 +82,6 @@ webSocket.onmessage = function(event) {
 				clickForbidden = true;
 		}
 };
- 
-var chess = document.getElementById('chess');
-var context = chess.getContext('2d');
- 
-context.strokeStyle = "#BFBFBF";
- 
-document.getElementById("restart").onclick = function(){
-	window.location.reload();
-}
-
-document.getElementById("rank").onclick = function(){
-	window.location.href = "rank.html";
-}
  
 //draw the board when onload
 var drawChessBoard = function(){
@@ -86,7 +93,7 @@ var drawChessBoard = function(){
 				context.lineTo(435 , 15 + i*30);
 				context.stroke();
 		}
-		var username =  window.location.search.substr(1);
+		username =  window.location.search.substr(1);
 		var msg = {
 			"name" : username
 		};
@@ -94,11 +101,27 @@ var drawChessBoard = function(){
 		console.log(username);
 		// Send the msg object as a JSON-formatted string.
 		webSocket.addEventListener('open', function () {
-			webSocket.send(JSON.stringify(msg))
+				webSocket.send(JSON.stringify(msg))
+		});
+
+		webSocket.addEventListener('open', function () {
+				keepAlive()
 		});
 	
 }
- 
+
+//keep connected
+function keepAlive() {
+		var timeout = 10000;
+		var fakeJson = {"a" : 1};
+		if (webSocket.readyState == webSocket.OPEN) {
+				webSocket.send(JSON.stringify(fakeJson));
+		}
+		setTimeout(keepAlive, timeout);
+
+
+}
+
 //One step when user click the board
 var oneStep = function(i , j , me){
 	context.beginPath();
@@ -118,7 +141,7 @@ var oneStep = function(i , j , me){
 
 //Click event
 chess.onclick = function(e){
-	if(over){
+	if(over || clickForbidden){
 			return;
 	}
 	var x = e.offsetX;
@@ -134,6 +157,8 @@ chess.onclick = function(e){
 		if(!over){
 			me = !me;
 		}
+		clickForbidden = true;
+		//console.log(clickForbidden);
 	}
 }
 

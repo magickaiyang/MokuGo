@@ -34,7 +34,9 @@ public class WebsocketActor extends AbstractActor {
                     System.out.println("Raw json: " + json.toString());
 
                     String name = json.findPath("name").textValue();    //test if it is a initial packet
-                    if (name == null) {
+                    boolean testPacket = json.findPath("color").isInt();
+
+                    if (testPacket) {   //a Packet class
                         Packet p = Json.fromJson(json, Packet.class);
                         System.out.println("incoming move: " + "x:" + p.pos.x + " position y:" + p.pos.y);
 
@@ -53,7 +55,7 @@ public class WebsocketActor extends AbstractActor {
                         System.out.println("computer's move: x:" + response.pos.x + " y: " + response.pos.y);
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());
-                    } else {
+                    } else if(name != null){    //contains initial name
                         System.out.println("New player name: " + name);
 
                         //create new game
@@ -74,6 +76,9 @@ public class WebsocketActor extends AbstractActor {
 
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());
+                    }
+                    else {  //dummy message
+                        out.tell(Json.toJson("keep-alive"),self());
                     }
                 }
             )

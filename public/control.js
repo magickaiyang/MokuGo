@@ -13,7 +13,7 @@ document.getElementById("restart").onclick = function(){
 }
 
 document.getElementById("rank").onclick = function(){
-		window.location.href = 'rank.html?' + username;
+		window.location.href = '/assets/rank.html?' + username;
 }
 
 // Initialize chessBoard

@@ -13,7 +13,7 @@ Play Gomoku with an algorithm that is unbeatable, and compete for positions on t
 ----------------------------
 
 ### Technologies and Servieces Utilized
-* A HTML5 and JavaScript Frontend, with the framework TBD.
-* A Java backend to calculate the computer's move by MiniMax algorithm with Alpha-beta Pruning.
+* A HTML5 and JavaScript Frontend.
+* A Java backend to calculate the computer's move by MiniMax algorithm with Alpha-beta Pruning. The use of Play Framework enables non-blocking processing.
 * A database is used to maintain a leaderboard.
 * The application is hosted on Heroku.

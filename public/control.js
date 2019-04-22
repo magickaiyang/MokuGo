@@ -7,7 +7,7 @@ var context = chess.getContext('2d');
 var username;
 //Background 
 var imgs = new Image();
-imgs.src = "wood2.jpg";
+imgs.src = "/assets/wood2.jpg";
 imgs.onload = createPat;//图片加载完成再执行
 function createPat(){
 		var bg = context.createPattern(imgs,"no-repeat");
@@ -24,7 +24,7 @@ document.getElementById("restart").onclick = function(){
 }
 
 document.getElementById("rank").onclick = function(){
-		window.location.href = 'rank.html?' + username;
+		window.location.href = '/assets/rank.html?' + username;
 }
 
 // Initialize chessBoard

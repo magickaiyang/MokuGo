@@ -58,6 +58,7 @@ public class LeaderboardController extends Controller {
             rs = pst.executeQuery();
             while (rs.next()) {
                 board.userrank = rs.getInt("count");
+		board.userrank += 1;	//rank is number of users with lower scores plus one
             }
             rs.close();
             st.close();

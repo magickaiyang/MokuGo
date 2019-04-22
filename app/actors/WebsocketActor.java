@@ -24,6 +24,7 @@ public class WebsocketActor extends AbstractActor {
 
     public WebsocketActor(ActorRef out) throws SQLException{
         this.out = out;
+
         System.out.println("Websocket constructor");
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         this.conn = DriverManager.getConnection(dbUrl);

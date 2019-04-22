@@ -5,15 +5,26 @@ var clickForbidden = false;
 var chess = document.getElementById('chess');
 var context = chess.getContext('2d');
 var username;
+//Background 
+var imgs = new Image();
+imgs.src = "wood2.jpg";
+imgs.onload = createPat;//图片加载完成再执行
+function createPat(){
+		var bg = context.createPattern(imgs,"no-repeat");
+		context.fillStyle = bg;
+		context.fillRect(0,0,chess.width,chess.height);
+}
+
+
  
-context.strokeStyle = "#BFBFBF";
+context.strokeStyle = "#000000";
  
 document.getElementById("restart").onclick = function(){
-		window.location.reload();
+		window.location.reload(true);
 }
 
 document.getElementById("rank").onclick = function(){
-		window.location.href = '/assets/rank.html?' + username;
+		window.location.href = 'rank.html?' + username;
 }
 
 // Initialize chessBoard
@@ -29,15 +40,15 @@ var webSocket = new WebSocket('wss://mokugo.herokuapp.com/ws');
 
 //send json package
 function sendText(x, y, status, color) {
-  // Construct a msg object containing the data the server needs to process the message from the chat client.
-  var msg = {
-    "pos": {"x": x, "y": y},
-		"status" : status,
-		"color": color
-  };
+		// Construct a msg object containing the data the server needs to process the message from the chat client.
+		var msg = {
+			"pos": {"x": x, "y": y},
+			"status" : status,
+			"color": color
+		};
 
-  // Send the msg object as a JSON-formatted string.
-  webSocket.send(JSON.stringify(msg));
+		// Send the msg object as a JSON-formatted string.
+		webSocket.send(JSON.stringify(msg));
 }
 
 //listen from server
@@ -54,7 +65,7 @@ webSocket.onmessage = function(event) {
 		var y = msg.pos.y;
 		if (status == 1) {
 				//user win
-				alert("You win!");
+				alert("You win!\nClick \"rank\" to see the world rank and your score\nOr click \"restart\" to try again");
 				over = true;
 		}
 		else if (status == 2){
@@ -124,41 +135,43 @@ function keepAlive() {
 
 //One step when user click the board
 var oneStep = function(i , j , me){
-	context.beginPath();
-	context.arc(15 + i*30 , 15 + j*30 , 13 , 0 , 2 * Math.PI);
-	context.closePath();
-	var gradient = context.createRadialGradient(15 + i*30 + 2 , 15 + j*30 - 2 , 13 , 15 + i*30 + 2 , 15 + j*30 - 2 , 0);
-	if(me){
-		gradient.addColorStop(0,"#0A0A0A");
-		gradient.addColorStop(1,"#636766");
-	}else{
-		gradient.addColorStop(0,"#D1D1D1");
-		gradient.addColorStop(1,"#F9F9F9");
-	}
-	context.fillStyle = gradient;
-	context.fill();
+		context.beginPath();
+		context.arc(15 + i*30 , 15 + j*30 , 13 , 0 , 2 * Math.PI);
+		context.closePath();
+		var gradient = context.createRadialGradient(15 + i*30 + 2 , 15 + j*30 - 2 , 13 , 15 + i*30 + 2 , 15 + j*30 - 2 , 0);
+		if(me){
+				gradient.addColorStop(0,"#0A0A0A");
+				gradient.addColorStop(1,"#636766");
+		}else{
+				gradient.addColorStop(0,"#D1D1D1");
+				gradient.addColorStop(1,"#F9F9F9");
+		}
+		context.fillStyle = gradient;
+		context.fill();
 }
 
 //Click event
 chess.onclick = function(e){
-	if(over || clickForbidden){
-			return;
-	}
-	var x = e.offsetX;
-	var y = e.offsetY;
-	var i = Math.floor(x / 30);
-	var j = Math.floor(y / 30);
-	if(chessBoard[i][j] == 0){
-		oneStep(i , j , me);
-		chessBoard[i][j] = 1;//me
-		//send json to server
-		sendText(i, j, 0, 1);
-
-		if(!over){
-			me = !me;
+		if(over || clickForbidden){
+				return;
 		}
-		clickForbidden = true;
-		//console.log(clickForbidden);
-	}
+		var x = e.offsetX;
+		var y = e.offsetY;
+		var i = Math.floor(x / 30);
+		var j = Math.floor(y / 30);
+		if(chessBoard[i][j] == 0){
+				oneStep(i , j , me);
+				chessBoard[i][j] = 1;//me
+				//send json to server
+				sendText(i, j, 0, 1);
+
+				if(!over){
+						me = !me;
+				}
+				clickForbidden = true;
+				//console.log(clickForbidden);
+		}
 }
+
+
 

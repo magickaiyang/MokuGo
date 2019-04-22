@@ -20,25 +20,40 @@
             width: 350px;
             height: 500px;
             vertical-align: middle;
+            
 		}
         #begin{
             cursor: pointer;
+        }
+        .inB{
+            width: 350px;
+            height: 300px;
+            margin: 100px 0 100px 0;
+        }
+        .inA{
+            width: 350px;
+            height: 85px;
+            margin-top:150px;
         }
 	</style>
 </head>
 <body>
     <div id="center">
         <div id="b">
-            <img src="/assets/major.jpg">
+            <div class='inB'>
+                <img src="major.jpg">
+            </div>
         </div>
         <div id="a">
-            <h1>Welcome to MokuGo</h1>
-            <h2>Please enter your username:</h2>
-            <input id="username" type="text" placeholder="Username">
-            <button id="begin" onclick="begin()">Begin</button>
+            <div class='inA'>
+                <h1>Welcome to MokuGo</h1>
+                <h2>Please enter your username:</h2>
+                <input id="username" type="text" placeholder="Username" onkeydown="if(event.keyCode==13){begin();return false}">
+                <button id="begin" onclick="begin()">Begin</button>
+            </div>
         </div>
     </div>
 
-    <script src="/assets/welcome.js"></script>
+    <script src="welcome.js"></script>
 </body>
 </html>

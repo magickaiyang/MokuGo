@@ -39,8 +39,16 @@ public class WebsocketActor extends AbstractActor {
         return Props.create(WebsocketActor.class, out);
     }
 
-    public void updateLeaderboard() {
+    public void updateLeaderboard() throws SQLException{
+        PreparedStatement pst = conn.prepareStatement("INSERT INTO leaderboard (\"user\",\"score\") VALUES (?, ?) " +
+            "ON CONFLICT (\"user\") DO UPDATE SET score = EXCLUDED.score WHERE EXCLUDED.score > leaderboard.score;");
+        pst.setString(1, m.getOppoName());
+        pst.setInt(2,m.getOppoFinalCount());
+        int rowsUpdated = pst.executeUpdate();
 
+        System.out.printf("%d rows updated\n", rowsUpdated);
+
+        pst.close();
     }
 
     @Override

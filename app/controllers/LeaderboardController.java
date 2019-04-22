@@ -26,8 +26,8 @@ public class LeaderboardController extends Controller {
         }
 
         public Board() {
-            this.userscore=-1;
-            this.userrank=-1;
+            this.userscore = -1;
+            this.userrank = -1;
             this.rank = new Entry[10];
         }
     }
@@ -45,7 +45,7 @@ public class LeaderboardController extends Controller {
         ResultSet rs = st.executeQuery("SELECT * FROM leaderboard ORDER BY score DESC LIMIT 10");
         int i = 0;
         while (rs.next()) {
-            board.rank[i] = new Board.Entry(rs.getString("user"), rs.getInt("score"));
+            board.rank[i++] = new Board.Entry(rs.getString("user"), rs.getInt("score"));
         }
         rs.close();
         st.close();
@@ -53,15 +53,15 @@ public class LeaderboardController extends Controller {
         if (!username.isEmpty()) {
             board.username = username;
 
-            PreparedStatement pst = conn.prepareStatement("SELECT count(\"user\") FROM leaderboard where score < (SELECT score FROM leaderboard where \"user\"= ?)");
+            PreparedStatement pst = conn.prepareStatement("SELECT count(\"user\") FROM leaderboard where score > (SELECT score FROM leaderboard where \"user\"= ?)");
             pst.setString(1, username);
             rs = pst.executeQuery();
             while (rs.next()) {
                 board.userrank = rs.getInt("count");
-		board.userrank += 1;	//rank is number of users with lower scores plus one
+                board.userrank += 1;    //rank is number of users with lower scores plus one
             }
             rs.close();
-            st.close();
+            pst.close();
 
             pst = conn.prepareStatement("SELECT score FROM leaderboard where \"user\"= ?");
             pst.setString(1, username);
@@ -70,7 +70,7 @@ public class LeaderboardController extends Controller {
                 board.userscore = rs.getInt("score");
             }
             rs.close();
-            st.close();
+            pst.close();
         }
 
         JsonNode responseJson = Json.toJson(board);

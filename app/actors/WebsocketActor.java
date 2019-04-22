@@ -19,6 +19,11 @@ public class WebsocketActor extends AbstractActor {
         public static class Position {
             public int x;
             public int y;
+
+            public Position() {
+                this.x=7;
+                this.y=7;
+            }
         }
     }
 
@@ -34,8 +39,16 @@ public class WebsocketActor extends AbstractActor {
         return Props.create(WebsocketActor.class, out);
     }
 
-    public void updateLeaderboard() {
+    public void updateLeaderboard() throws SQLException{
+        PreparedStatement pst = conn.prepareStatement("INSERT INTO leaderboard (\"user\",\"score\") VALUES (?, ?) " +
+            "ON CONFLICT (\"user\") DO UPDATE SET score = EXCLUDED.score WHERE EXCLUDED.score > leaderboard.score;");
+        pst.setString(1, m.getOppoName());
+        pst.setInt(2,m.getOppoFinalCount());
+        int rowsUpdated = pst.executeUpdate();
 
+        System.out.printf("%d rows updated\n", rowsUpdated);
+
+        pst.close();
     }
 
     @Override
@@ -55,6 +68,8 @@ public class WebsocketActor extends AbstractActor {
                         m.setBoardVal(p.pos.y, p.pos.x, 1); //1 for opponent, the backend does NOT check if the row/range is legal
 
                         Packet response=new Packet();
+                        response.pos=new Packet.Position();
+
                         if (m.getGameState()==1 || m.getGameState()==3){
                             response.status = m.getGameState();
                             System.out.printf("game ends, status:%d\n", response.status);

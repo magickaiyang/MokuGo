@@ -65,7 +65,7 @@ webSocket.onmessage = function(event) {
 		var y = msg.pos.y;
 		if (status == 1) {
 				//user win
-				alert("You win!\nClick \"rank\" to see the world rank and your score\nOr click \"restart\" to try again");
+				alert("You win!\nClick \"Rank\" to see the world rank and your score\nOr click \"Restart\" to try again");
 				over = true;
 		}
 		else if (status == 2){
@@ -76,7 +76,7 @@ webSocket.onmessage = function(event) {
 				}
 				//need to sleep
 				
-				alert("The computer wins!");
+				alert("The computer wins!\nClick \"Rank\" to see the world rank and your score\nOr click \"Restart\" to try again");
 				over = true;
 		}
 		else{

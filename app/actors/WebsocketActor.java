@@ -19,6 +19,11 @@ public class WebsocketActor extends AbstractActor {
         public static class Position {
             public int x;
             public int y;
+
+            public Position() {
+                this.x=7;
+                this.y=7;
+            }
         }
     }
 
@@ -55,6 +60,8 @@ public class WebsocketActor extends AbstractActor {
                         m.setBoardVal(p.pos.y, p.pos.x, 1); //1 for opponent, the backend does NOT check if the row/range is legal
 
                         Packet response=new Packet();
+                        response.pos=new Packet.Position();
+
                         if (m.getGameState()==1 || m.getGameState()==3){
                             response.status = m.getGameState();
                             System.out.printf("game ends, status:%d\n", response.status);

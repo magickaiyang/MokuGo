@@ -1,9 +1,9 @@
 //fake list
 var rankList = [
-    "1.Mike",
-    "2.John",
-    "3.Bob",
-    "4.Bruce"
+    {score: 3, username: "Mike" },
+    {score: 2, username: "John" },
+    {score: 1, username: "Bob" },
+    {score: 0, username: "Bruce"}
 ];
 
 function insert()
@@ -12,17 +12,26 @@ function insert()
     console.log(username);
     getJSON('https://mokugo.herokuapp.com/ldrbrd/' + username).then(function(data) {
         console.log(data);
-        alert('Your Json result is:  ' + data); //you can comment this, i used it to debug
+        //alert('Your Json result is:  ' + data); //you can comment this, i used it to debug
+        var msg = JSON.parse(data);
+        var userscore = msg.userscore;
+        var userrank = msg.userrank;
+        var username = msg.username;
+        var rank = msg.rank;
+
+        var data=rank;
+        for (var i=0;i<data.length;i++){
+            if (data[i] != null) {
+                var j = i+1
+                document.getElementById("list").innerHTML+="<li>"+j+". "+data[i].username+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data[i].score +"<\/li>"; 
+            }
+        }
+        document.getElementById("you").innerHTML +="Your score: "+userscore+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your rank: "+userrank;
         
     }, function(status) { //error detection....
         alert('Something went wrong.');
     });
 
-
-	var data=rankList;
-	for (var i=0;i<data.length;i++){
-    	document.getElementById("list").innerHTML+="<li>"+data[i]+"<\/li>"; 
-	}
 }
 
 var getJSON = function(url) {

@@ -21,13 +21,13 @@ public class WebsocketActor extends AbstractActor {
             public int y;
 
             public Position() {
-                this.x=7;
-                this.y=7;
+                this.x = 7;
+                this.y = 7;
             }
         }
     }
 
-    public WebsocketActor(ActorRef out) throws SQLException{
+    public WebsocketActor(ActorRef out) throws SQLException {
         this.out = out;
 
         System.out.println("Websocket constructor");
@@ -39,11 +39,11 @@ public class WebsocketActor extends AbstractActor {
         return Props.create(WebsocketActor.class, out);
     }
 
-    public void updateLeaderboard() throws SQLException{
+    public void updateLeaderboard() throws SQLException {
         PreparedStatement pst = conn.prepareStatement("INSERT INTO leaderboard (\"user\",\"score\") VALUES (?, ?) " +
             "ON CONFLICT (\"user\") DO UPDATE SET score = EXCLUDED.score WHERE EXCLUDED.score > leaderboard.score;");
         pst.setString(1, m.getOppoName());
-        pst.setInt(2,m.getOppoFinalCount());
+        pst.setInt(2, m.getOppoFinalCount());
         int rowsUpdated = pst.executeUpdate();
 
         System.out.printf("%d rows updated\n", rowsUpdated);
@@ -67,31 +67,32 @@ public class WebsocketActor extends AbstractActor {
                         //place user's counter-move
                         m.setBoardVal(p.pos.y, p.pos.x, 1); //1 for opponent, the backend does NOT check if the row/range is legal
 
-                        Packet response=new Packet();
-                        response.pos=new Packet.Position();
+                        Packet response = new Packet();
+                        response.pos = new Packet.Position();
 
-                        if (m.getGameState()==1 || m.getGameState()==3){
+                        if (m.getGameState() == 1 || m.getGameState() == 3) {
                             response.status = m.getGameState();
                             System.out.printf("game ends, status:%d\n", response.status);
-                        }else {
+                        } else {
                             //get response of moku AI (counter already placed)
-                            response.pos=new Packet.Position();
+                            response.pos = new Packet.Position();
                             int[] choice = m.getMokuChoice(3); //depth>0, proportional to AI smartness
-                            response.pos.x=choice[1];
-                            response.pos.y=choice[0];
-                            response.color=0; //-1 for null, 1 for opponent, 0 for moku
-                            response.status=m.getGameState(); //0 for continue, 1 for opponent win, 2 for moku win, 3 for tie
+                            response.pos.x = choice[1];
+                            response.pos.y = choice[0];
+                            response.color = 0; //-1 for null, 1 for opponent, 0 for moku
+                            response.status = m.getGameState(); //0 for continue, 1 for opponent win, 2 for moku win, 3 for tie
 
                             System.out.println("computer's move: x:" + response.pos.x + " y: " + response.pos.y);
                         }
 
-                        if(response.status!=0) {    //game has ended, update leaderboard
-                            updateLeaderboard();
-                        }
-
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());
-                    } else if(name != null){    //contains initial name
+
+                        if (response.status != 0) {    //game has ended
+                            updateLeaderboard();
+                            self().tell(PoisonPill.getInstance(), self());  //terminate connection
+                        }
+                    } else if (name != null) {    //contains initial name
                         System.out.println("New player name: " + name);
 
                         //create new game
@@ -103,18 +104,17 @@ public class WebsocketActor extends AbstractActor {
                         m.setBoardVal(firstX, firstY, 0); //-1 for null, 1 for opponent, 0 for moku
 
                         //send back first placement of moku
-                        Packet response=new Packet();
-                        response.pos=new Packet.Position();
-                        response.pos.x=firstX;
-                        response.pos.y=firstY;
-                        response.color=0; //-1 for null, 1 for opponent, 0 for moku
-                        response.status=m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
+                        Packet response = new Packet();
+                        response.pos = new Packet.Position();
+                        response.pos.x = firstX;
+                        response.pos.y = firstY;
+                        response.color = 0; //-1 for null, 1 for opponent, 0 for moku
+                        response.status = m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
 
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());
-                    }
-                    else {  //dummy message
-                        out.tell(Json.toJson("keep-alive"),self());
+                    } else {  //dummy message
+                        out.tell(Json.toJson("keep-alive"), self());
                     }
                 }
             )

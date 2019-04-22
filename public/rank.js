@@ -13,7 +13,7 @@ function insert()
     getJSON('https://mokugo.herokuapp.com/ldrbrd/' + username).then(function(data) {
         console.log(data);
         //alert('Your Json result is:  ' + data); //you can comment this, i used it to debug
-        var msg = JSON.parse(data);
+        var msg = data;
         var userscore = msg.userscore;
         var userrank = msg.userrank;
         var username = msg.username;

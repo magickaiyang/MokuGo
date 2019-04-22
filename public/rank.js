@@ -26,7 +26,7 @@ function insert()
                 document.getElementById("list").innerHTML+="<li>"+j+". "+data[i].username+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+data[i].score +"<\/li>"; 
             }
         }
-        document.getElementById("you").innerHTML +="Your score: "+userscore+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your rank: "+userrank;
+        document.getElementById("you").innerHTML +="Your highest score: "+userscore+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your rank: "+userrank;
         
     }, function(status) { //error detection....
         alert('Something went wrong.');

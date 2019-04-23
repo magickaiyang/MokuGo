@@ -67,14 +67,14 @@ public class MokuGoGame {
 	}
 
 	public int getBoardVal(int row, int range) {
-		if (row <= 0 || row >= boardSize || range <= 0 || range >= boardSize) {
+		if (row < 0 || row >= boardSize || range < 0 || range >= boardSize) {
 			return -1; //out of border
 		}
 		return boardVal[row][range];
 	}
 
 	public boolean resetBoardVal(int row, int range, int player) {
-		if (row <= 0 || row >= boardSize || range <= 0 || range >= boardSize) {
+		if (row < 0 || row >= boardSize || range < 0 || range >= boardSize) {
 			return false; //out of border
 		}
 		if (boardVal[row][range] == -1) {
@@ -92,7 +92,7 @@ public class MokuGoGame {
 	}
 
 	public boolean setBoardVal(int row, int range, int player) {
-		if (row <= 0 || row >= boardSize || range <= 0 || range >= boardSize) {
+		if (row < 0 || row >= boardSize || range < 0 || range >= boardSize) {
 			return false; //out of border
 		}
 		if (boardVal[row][range] >= 0) {

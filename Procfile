@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/mokugo -Dhttp.port=$PORT -Dplay.http.secret.key=$APPLICATION_SECRET
+web: target/universal/stage/bin/mokugo -Dhttp.port=$PORT -Dplay.http.secret.key=$APPLICATION_SECRET -J-javaagent:/app/target/universal/stage/lib/com.newrelic.agent.java.newrelic-agent-5.0.0.jar -J-Dnewrelic.config.file=conf/newrelic.yml

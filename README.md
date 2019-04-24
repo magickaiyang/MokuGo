@@ -1,5 +1,5 @@
 # MokuGo
-Play Gomoku with an algorithm that is unbeatable, and compete for positions on the leaderboard!
+Play Gomoku with a 1-year-old computer program, and compete for positions on the leaderboard!
 
 ----------------------------
 
@@ -13,7 +13,8 @@ Play Gomoku with an algorithm that is unbeatable, and compete for positions on t
 ----------------------------
 
 ### Technologies and Servieces Utilized
-* A HTML5 and JavaScript Frontend.
-* A Java backend to calculate the computer's move by MiniMax algorithm with Alpha-beta Pruning. The use of Play Framework enables non-blocking processing.
-* A database is used to maintain a leaderboard.
+* An HTML5 and JavaScript frontend that communicates with server by WebSocket.
+* A Java backend to calculate the computer's move by MiniMax algorithm with Alpha-beta Pruning. The use of Play Framework enables non-blocking asynchronous processing to serve multiple users.
+* A PostgreSQL database is used to maintain a leaderboard.
 * The application is hosted on Heroku.
+* See demo on [YouTube](https://youtu.be/IudYcUQFwlU)!

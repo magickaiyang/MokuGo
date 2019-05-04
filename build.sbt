@@ -9,5 +9,3 @@ scalaVersion := "2.12.8"
 
 libraryDependencies += guice
 libraryDependencies += "org.postgresql" % "postgresql" % "42.2.5"
-libraryDependencies ++= Seq("com.newrelic.agent.java" % "newrelic-agent" % "5.0.0")
-libraryDependencies ++= Seq("com.newrelic.agent.java" % "newrelic-api" % "5.0.0")

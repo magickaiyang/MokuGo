@@ -1,30 +1,15 @@
 //fake list
 var rankList = [
-    {score: 3, username: "Mike" },
-    {score: 2, username: "John" },
-    {score: 1, username: "Bob" },
+    {score: 3, username: "Mike"},
+    {score: 2, username: "John"},
+    {score: 1, username: "Bob"},
     {score: 0, username: "Bruce"}
 ];
 
-function insert()
-{
-    /*
-    //for local test
-    var userscore = 1;
-    var userrank = 2;
-
-    var data=rankList;
-    for (var i=0;i<data.length;i++){
-        if (data[i] != null) {
-            var j = i+1
-            document.getElementById("list").innerHTML+="<tr height=\"25\">"+"<td>"+j+". "+data[i].username+"</td>"+"<td align=\"right\">"+data[i].score+"</td>" +"<\/tr>"; 
-        }
-    }
-    document.getElementById("you").innerHTML +="Your highest score: "+userscore+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your rank: "+userrank;
-    */
-    var username =  window.location.search.substr(1);
+function insert() {
+    var username = window.location.search.substr(1);
     console.log(username);
-    getJSON('https://mokugo.herokuapp.com/ldrbrd/' + username).then(function(data) {
+    getJSON(location.protocol + '//' + location.host + '/ldrbrd/' + username).then(function (data) {
         console.log(data);
         //alert('Your Json result is:  ' + data); //you can comment this, i used it to debug
         var msg = data;
@@ -33,28 +18,28 @@ function insert()
         var username = msg.username;
         var rank = msg.rank;
 
-        var data=rank;
-        for (var i=0;i<data.length;i++){
+        var data = rank;
+        for (var i = 0; i < data.length; i++) {
             if (data[i] != null) {
-                var j = i+1
-                document.getElementById("list").innerHTML+="<tr height=\"25\">"+"<td>"+j+". "+data[i].username+"</td>"+"<td align=\"right\">"+data[i].score+"</td>" +"<\/tr>"; 
+                var j = i + 1
+                document.getElementById("list").innerHTML += "<tr height=\"25\">" + "<td>" + j + ". " + data[i].username + "</td>" + "<td align=\"right\">" + data[i].score + "</td>" + "<\/tr>";
             }
         }
-        document.getElementById("you").innerHTML +="Your highest score: "+userscore+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your rank: "+userrank;
-        
-    }, function(status) { //error detection....
+        document.getElementById("you").innerHTML += "Your highest score: " + userscore + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your rank: " + userrank;
+
+    }, function (status) { //error detection....
         alert('Something went wrong.');
     });
 
 }
 
-var getJSON = function(url) {
+var getJSON = function (url) {
     console.log(url);
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('get', url, true);
         xhr.responseType = 'json';
-        xhr.onload = function() {
+        xhr.onload = function () {
             var status = xhr.status;
             if (status == 200) {
                 resolve(xhr.response);

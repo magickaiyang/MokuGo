@@ -8,7 +8,7 @@ var username;
 //Background 
 var imgs = new Image();
 imgs.src = "/assets/wood2.jpg";
-imgs.onload = createPat;//图片加载完成再执行
+imgs.onload = createPat;
 function createPat(){
 		var bg = context.createPattern(imgs,"no-repeat");
 		context.fillStyle = bg;
@@ -36,7 +36,7 @@ for(var i=0 ; i<15 ; i++){
 }
 
 //send and get json
-var webSocket = new WebSocket('wss://mokugo.herokuapp.com/ws');
+var webSocket = new WebSocket('wss://'+location.host+'/ws');
 
 //send json package
 function sendText(x, y, status, color) {

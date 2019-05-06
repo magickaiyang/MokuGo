@@ -1,47 +1,61 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<title>MokuGo Game</title>
-	<style type="text/css">
-		canvas{
-		    display: block;
-		    margin: 50px auto;
-		    box-shadow: -2px -2px 2px #efefef, 5px 5px 5px #b9b9b9;
-			cursor: pointer;
-		}
- 
-		#center{
-		    text-align: center;
-		}
-		#center>div{
-			display: inline-block;
-		}
-		.restart>span{
-		    display: inline-block;
-		    padding: 10px 20px;
-		    color: #fff;
-		    background-color: #45c01a;
-		    border-radius: 5px;
-			cursor: pointer;
-		}
-	</style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139646755-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-139646755-1');
+    </script>
+    <meta charset="utf-8"/>
+    <title>MokuGo Game</title>
+    <style type="text/css">
+        canvas {
+            display: block;
+            margin: 50px auto;
+            box-shadow: -2px -2px 2px #efefef, 5px 5px 5px #b9b9b9;
+            cursor: pointer;
+        }
+
+        #center {
+            text-align: center;
+        }
+
+        #center > div {
+            display: inline-block;
+        }
+
+        .restart > span {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #45c01a;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body onload="drawChessBoard()">
-    <div id='board'>
-		<canvas id="chess" width="450px" height="450px"></canvas>
-		<div id="center">
-        	<div id='restart' class="restart">
-            	<span>Restart</span>
-			</div>
-			<div id='rank' class="restart">
-				<span>Rank</span>
-			</div>
-		</div>
-		
+<div id='board'>
+    <canvas id="chess" width="450px" height="450px"></canvas>
+    <div id="center">
+        <div id='restart' class="restart">
+            <span>Restart</span>
+        </div>
+        <div id='rank' class="restart">
+            <span>Rank</span>
+        </div>
     </div>
 
-    <script src="/assets/control.js"></script>
+</div>
+
+<script src="/assets/control.js"></script>
 </body>
 </html>

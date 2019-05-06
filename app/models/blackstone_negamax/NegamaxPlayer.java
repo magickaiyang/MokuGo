@@ -33,7 +33,7 @@ public class NegamaxPlayer implements Player {
         if (r == 1 && this.state.currentIndex == 2) {
             r = 2;
         }
-        if (r == 2 && this.state.currentIndex == 2) {
+        else if (r == 2 && this.state.currentIndex == 1) {
             r = 1;
         }
 

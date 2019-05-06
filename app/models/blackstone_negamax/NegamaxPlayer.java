@@ -298,8 +298,26 @@ public class NegamaxPlayer implements Player {
     @Override
     public Move getMove(Move opponentsMove, long gameTimeRemainingMillis) {
         moves.add(opponentsMove);
-        Move bestMove = getBestMove();
-        moves.add(bestMove);
+
+        // Refresh the game state
+        this.state = new State(size);
+        moves.forEach((move) -> {
+            state.makeMove(move);
+        });
+
+        Move bestMove = new Move(-1, -1);
+        if(state.terminal() == 0) { //game should continue
+            bestMove = getBestMove();
+            moves.add(bestMove);
+
+            // Refresh the game state
+            this.state = new State(size);
+            moves.forEach((move) -> {
+                state.makeMove(move);
+            });
+        }
+
+
         return bestMove;
     }
 

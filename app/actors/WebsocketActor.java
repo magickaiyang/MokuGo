@@ -74,10 +74,10 @@ public class WebsocketActor extends AbstractActor {
                         response.pos = new Packet.Position();
 
                         //place user's move, compute AI's move and check game state
-                        Move aiMove = m.getMove(new Move(p.pos.y, p.pos.x),0);
+                        Move aiMove = m.getMove(new Move(p.pos.y, p.pos.x), 0);
                         response.status = m.getGameState(); //0 for continue, 1 for opponent win, 2 for AI win, 3 for tie
 
-                        if (response.status == 1 || response.status == 3) {
+                        if (response.status != 0) {
                             System.out.printf("game ends, status:%d\n", response.status);
                         } else {
                             //get response of AI
@@ -103,7 +103,7 @@ public class WebsocketActor extends AbstractActor {
 
                         //create new game, computer play black, size is 15x15, max time per move is 30s
                         this.m = new NegamaxPlayer();
-                        m.setupGame(1,15,30000,0);
+                        m.setupGame(1, 15, 30000, 0);
 
                         //initialize first placement of black stone
                         Move initMove = m.beginGame(0);

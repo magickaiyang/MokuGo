@@ -30,10 +30,10 @@ public class NegamaxPlayer implements Player {
         int r = this.state.terminal();
 
         //transform status code to 1 for opponent win, 2 for computer win
-        if(r == 1) {
+        if (r == 1 && this.state.currentIndex == 1) {
             r = 2;
         }
-        if(r == 2) {
+        if (r == 2 && this.state.currentIndex == 1) {
             r = 1;
         }
 
@@ -43,6 +43,7 @@ public class NegamaxPlayer implements Player {
     /**
      * Determines if we need to respond to any threats on the board, if so,
      * we use a reduced set of moves in the search.
+     *
      * @param state State to check
      * @return List of defensive threat moves
      */
@@ -59,34 +60,33 @@ public class NegamaxPlayer implements Player {
         HashSet<Move> opponentRefutations = new HashSet<>();
 
         // Check for threats first and respond to them if they exist
-        for(int i = 0; i < state.board.length; i++) {
-            for(int j = 0; j < state.board.length; j++) {
-                if(state.board[i][j].index == opponentIndex) {
+        for (int i = 0; i < state.board.length; i++) {
+            for (int j = 0; j < state.board.length; j++) {
+                if (state.board[i][j].index == opponentIndex) {
                     opponentFours.addAll(ThreatUtils.getFours(state,
-                            state.board[i][j], opponentIndex));
+                        state.board[i][j], opponentIndex));
                     opponentThrees.addAll(ThreatUtils.getThrees(state,
-                            state.board[i][j], opponentIndex));
+                        state.board[i][j], opponentIndex));
                     opponentRefutations.addAll(ThreatUtils.getRefutations
-                            (state, state.board[i][j], opponentIndex));
-                }
-                else if(state.board[i][j].index == playerIndex) {
+                        (state, state.board[i][j], opponentIndex));
+                } else if (state.board[i][j].index == playerIndex) {
                     fours.addAll(ThreatUtils.getFours(state, state.board[i][j],
-                            playerIndex));
+                        playerIndex));
                     threes.addAll(ThreatUtils.getThrees(state, state
-                            .board[i][j], playerIndex));
+                        .board[i][j], playerIndex));
                     refutations.addAll(ThreatUtils.getRefutations(state, state
-                            .board[i][j], playerIndex));
+                        .board[i][j], playerIndex));
                 }
             }
         }
 
         // We have a four on the board, play it
-        if(!fours.isEmpty()) {
+        if (!fours.isEmpty()) {
             return new ArrayList<>(fours);
         }
 
         // Opponent has a four, defend against it
-        if(!opponentFours.isEmpty()) {
+        if (!opponentFours.isEmpty()) {
             return new ArrayList<>(opponentFours);
         }
 
@@ -94,13 +94,13 @@ public class NegamaxPlayer implements Player {
         // Either we play the three and win, or our opponent has a refutation
         // that leads to their win. So we only consider our three and the
         // opponents refutations.
-        if(!threes.isEmpty()) {
+        if (!threes.isEmpty()) {
             threes.addAll(opponentRefutations);
             return new ArrayList<>(threes);
         }
 
         // Opponent has a three, defend against it and add refutation moves
-        if(!opponentThrees.isEmpty()) {
+        if (!opponentThrees.isEmpty()) {
             opponentThrees.addAll(refutations);
             return new ArrayList<>(opponentThrees);
         }
@@ -112,19 +112,20 @@ public class NegamaxPlayer implements Player {
      * Generate a list of sorted and pruned moves for this state. Moves are
      * pruned when they are too far away from existing stones, and also when
      * threats are found which require an immediate response.
+     *
      * @param state State to get moves for
      * @return A list of moves, sorted and pruned
      */
     private List<Move> getSortedMoves(State state) {
         // Board is empty, return a move in the middle of the board
-        if(state.getMoves() == 0) {
+        if (state.getMoves() == 0) {
             List<Move> moves = new ArrayList<>();
             moves.add(new Move(state.board.length / 2, state.board.length / 2));
             return moves;
         }
 
         List<Move> threatResponses = getThreatResponses(state);
-        if(!threatResponses.isEmpty()) {
+        if (!threatResponses.isEmpty()) {
             return threatResponses;
         }
 
@@ -132,12 +133,12 @@ public class NegamaxPlayer implements Player {
 
         // Grab closest moves
         List<Move> moves = new ArrayList<>();
-        for(int i = 0; i < state.board.length; i++) {
-            for(int j = 0; j < state.board.length; j++) {
-                if(state.board[i][j].index == 0) {
-                    if(state.hasAdjacent(i, j, 2)) {
+        for (int i = 0; i < state.board.length; i++) {
+            for (int j = 0; j < state.board.length; j++) {
+                if (state.board[i][j].index == 0) {
+                    if (state.hasAdjacent(i, j, 2)) {
                         int score = Evaluator.evaluateField(state, i, j,
-                                state.currentIndex);
+                            state.currentIndex);
                         scoredMoves.add(new ScoredMove(new Move(i, j), score));
                     }
                 }
@@ -146,7 +147,7 @@ public class NegamaxPlayer implements Player {
 
         // Sort based on move score
         Collections.sort(scoredMoves);
-        for(ScoredMove move : scoredMoves) {
+        for (ScoredMove move : scoredMoves) {
             moves.add(move.move);
         }
         return moves;
@@ -154,20 +155,21 @@ public class NegamaxPlayer implements Player {
 
     /**
      * Run the negamax algorithm for a node in the game tree.
+     *
      * @param state Node to search
      * @param depth Depth to search to
      * @param alpha Alpha bound
-     * @param beta Beta bound
+     * @param beta  Beta bound
      * @return Score of the node
      * @throws InterruptedException Timeout or interrupted by the user
      */
     private int negamax(State state, int depth, int alpha, int beta)
-            throws InterruptedException {
+        throws InterruptedException {
         totalNodeCount++;
-        if(Thread.interrupted() || (System.nanoTime() - startTime) > timeNanos) {
+        if (Thread.interrupted() || (System.nanoTime() - startTime) > timeNanos) {
             throw new InterruptedException();
         }
-        if(depth == 0 || state.terminal() != 0) {
+        if (depth == 0 || state.terminal() != 0) {
             return Evaluator.evaluateState(state, depth);
         }
         nonLeafCount++;
@@ -183,11 +185,11 @@ public class NegamaxPlayer implements Player {
             state.makeMove(move);
             value = -negamax(state, depth - 1, -beta, -alpha);
             state.undoMove(move);
-            if(value > best) {
+            if (value > best) {
                 best = value;
             }
-            if(best > alpha) alpha = best;
-            if(best >= beta) {
+            if (best > alpha) alpha = best;
+            if (best >= beta) {
                 break;
             }
         }
@@ -198,14 +200,15 @@ public class NegamaxPlayer implements Player {
     /**
      * Run a depth-limited negamax search on a set of moves, sorting them by
      * score.
+     *
      * @param depth Depth to search to
      * @return Original move list sorted by best score first
      */
     private List<Move> searchMoves(State state, List<Move> moves, int depth)
-            throws InterruptedException {
+        throws InterruptedException {
 
         List<ScoredMove> scoredMoves = new ArrayList<>();
-        for(Move move : moves) {
+        for (Move move : moves) {
             scoredMoves.add(new ScoredMove(move, Integer.MIN_VALUE));
         }
 
@@ -213,36 +216,37 @@ public class NegamaxPlayer implements Player {
         int beta = 11000;
         int best = Integer.MIN_VALUE;
 
-        for(ScoredMove move : scoredMoves) {
+        for (ScoredMove move : scoredMoves) {
             state.makeMove(move.move);
             move.score = -negamax(state, depth - 1, -beta, -alpha);
             state.undoMove(move.move);
-            if(move.score > best) best = move.score;
-            if(best > alpha) alpha = best;
-            if(best >= beta) break;
+            if (move.score > best) best = move.score;
+            if (best > alpha) alpha = best;
+            if (best >= beta) break;
         }
 
         scoredMoves.sort((move1, move2) -> move2.score - move1.score);
         printSearchInfo(scoredMoves.get(0).move, scoredMoves.get(0).score,
-                depth);
+            depth);
 
         moves.clear();
-        for(ScoredMove move : scoredMoves) moves.add(move.move);
+        for (ScoredMove move : scoredMoves) moves.add(move.move);
         return moves;
     }
 
     /**
      * Run negamax for an increasing depth, sorting the moves after every
      * completed search
+     *
      * @param startDepth Start depth
-     * @param endDepth Maximum depth
+     * @param endDepth   Maximum depth
      * @return Best move found
      */
-    private Move iterativeDeepening(int startDepth, int endDepth)  {
+    private Move iterativeDeepening(int startDepth, int endDepth) {
         this.startTime = System.nanoTime();
         List<Move> moves = getSortedMoves(state);
-        if(moves.size() == 1) return moves.get(0);
-        for(int i = startDepth; i <= endDepth; i++) {
+        if (moves.size() == 1) return moves.get(0);
+        for (int i = startDepth; i <= endDepth; i++) {
             try {
                 moves = searchMoves(state, moves, i);
             } catch (InterruptedException e) {
@@ -257,11 +261,11 @@ public class NegamaxPlayer implements Player {
      * in the game tree and the nodes traversed per millisecond.
      */
     private void printPerformanceInfo() {
-        if(totalNodeCount > 0) {
+        if (totalNodeCount > 0) {
             long duration = (System.nanoTime() - startTime) / 1000000;
             double nodesPerMs = totalNodeCount / (duration > 0 ? duration : 1);
             double avgBranches = (double) branchesExploredSum / (double)
-                    nonLeafCount;
+                nonLeafCount;
 //            LOGGER.info("Time: {}ms", duration);
 //            LOGGER.info( "Nodes: {}", totalNodeCount);
 //            LOGGER.info("Nodes/ms: {}", nodesPerMs);
@@ -269,7 +273,7 @@ public class NegamaxPlayer implements Player {
 //                    String.format("%.2f", avgBranches));
         }
     }
-    
+
     /**
      * Print the result of a search. Includes the best move found, depth
      * searched, and the evaluation score.
@@ -306,7 +310,7 @@ public class NegamaxPlayer implements Player {
         });
 
         Move bestMove = new Move(-1, -1);
-        if(state.terminal() == 0) { //game should continue
+        if (state.terminal() == 0) { //game should continue
             bestMove = getBestMove();
             moves.add(bestMove);
 
@@ -317,7 +321,6 @@ public class NegamaxPlayer implements Player {
             });
         }
 
-
         return bestMove;
     }
 
@@ -327,11 +330,11 @@ public class NegamaxPlayer implements Player {
         this.nonLeafCount = 0;
         this.branchesExploredSum = 0;
 
-        // Create a new internal state object, sync with the game state
-        this.state = new State(size);
-        moves.forEach((move) -> {
-            state.makeMove(move);
-        });
+//        // Create a new internal state object, sync with the game state
+//        this.state = new State(size);
+//        moves.forEach((move) -> {
+//            state.makeMove(move);
+//        });
 
         // Run a depth increasing search
         Move best = iterativeDeepening(2, 7);
@@ -354,6 +357,7 @@ public class NegamaxPlayer implements Player {
     private class ScoredMove implements Comparable<ScoredMove> {
         public Move move;
         public int score;
+
         public ScoredMove(Move move, int score) {
             this.move = move;
             this.score = score;

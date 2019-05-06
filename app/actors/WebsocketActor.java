@@ -77,25 +77,20 @@ public class WebsocketActor extends AbstractActor {
                         Move aiMove = m.getMove(new Move(p.pos.y, p.pos.x), 0);
                         response.status = m.getGameState(); //0 for continue, 1 for opponent win, 2 for AI win, 3 for tie
 
-                        if (response.status != 0) {
-                            System.out.printf("game ends, status:%d\n", response.status);
-                        } else {
-                            //get response of AI
-                            response.pos.x = aiMove.col;
-                            response.pos.y = aiMove.row;
-                            response.color = 0; //-1 for null, 1 for opponent, 0 for AI
-
-                            this.oppoFinalCount++;
-
-                            System.out.println("computer's move: x:" + response.pos.x + " y: " + response.pos.y);
-                        }
-
+                        //sends response of AI
+                        response.pos.x = aiMove.col;
+                        response.pos.y = aiMove.row;
+                        response.color = 0; //-1 for null, 1 for opponent, 0 for AI
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());
 
-                        if (response.status != 0) {    //game has ended
+                        if (response.status != 0) { //game has ended
+                            System.out.printf("game ends, status:%d\n", response.status);
                             updateLeaderboard();
                             self().tell(PoisonPill.getInstance(), self());  //terminate connection
+                        } else {
+                            this.oppoFinalCount++;
+                            System.out.println("computer's move: x:" + response.pos.x + " y: " + response.pos.y);
                         }
                     } else if (name != null) {    //contains initial name
                         System.out.println("New player name: " + name);

@@ -13,7 +13,6 @@ import java.sql.*;
 public class WebsocketActor extends AbstractActor {
     private final ActorRef out;
     private Player m;
-    private Connection conn;
     private String oppoName;
     private int oppoFinalCount;
 
@@ -33,19 +32,19 @@ public class WebsocketActor extends AbstractActor {
         }
     }
 
-    public WebsocketActor(ActorRef out) throws SQLException {
+    public WebsocketActor(ActorRef out) {
         this.out = out;
 
         System.out.println("Websocket constructor");
-        String dbUrl = System.getenv("JDBC_DATABASE_URL");
-        this.conn = DriverManager.getConnection(dbUrl);
     }
 
     public static Props props(ActorRef out) {
         return Props.create(WebsocketActor.class, out);
     }
 
-    public void updateLeaderboard() throws SQLException {
+    private void updateLeaderboard() throws SQLException {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        Connection conn = DriverManager.getConnection(dbUrl);
         PreparedStatement pst = conn.prepareStatement("INSERT INTO leaderboard (\"user\",\"score\") VALUES (?, ?) " +
             "ON CONFLICT (\"user\") DO UPDATE SET score = EXCLUDED.score WHERE EXCLUDED.score > leaderboard.score;");
         pst.setString(1, this.oppoName);
@@ -55,6 +54,7 @@ public class WebsocketActor extends AbstractActor {
         System.out.printf("%d rows updated\n", rowsUpdated);
 
         pst.close();
+        conn.close();
     }
 
     @Override

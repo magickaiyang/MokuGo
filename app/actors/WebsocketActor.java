@@ -1,5 +1,9 @@
 package actors;
 
+import models.Move;
+import models.Player;
+import models.blackstone_negamax.NegamaxPlayer;
+
 import play.libs.Json;
 import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.*;
@@ -8,8 +12,10 @@ import java.sql.*;
 
 public class WebsocketActor extends AbstractActor {
     private final ActorRef out;
-    private MokuGoGame m;
+    private Player m;
     private Connection conn;
+    private String oppoName;
+    private int oppoFinalCount;
 
     private static class Packet {
         public int status;
@@ -42,8 +48,8 @@ public class WebsocketActor extends AbstractActor {
     public void updateLeaderboard() throws SQLException {
         PreparedStatement pst = conn.prepareStatement("INSERT INTO leaderboard (\"user\",\"score\") VALUES (?, ?) " +
             "ON CONFLICT (\"user\") DO UPDATE SET score = EXCLUDED.score WHERE EXCLUDED.score > leaderboard.score;");
-        pst.setString(1, m.getOppoName());
-        pst.setInt(2, m.getOppoFinalCount());
+        pst.setString(1, this.oppoName);
+        pst.setInt(2, this.oppoFinalCount);
         int rowsUpdated = pst.executeUpdate();
 
         System.out.printf("%d rows updated\n", rowsUpdated);
@@ -62,25 +68,24 @@ public class WebsocketActor extends AbstractActor {
 
                     if (testPacket) {   //a Packet class
                         Packet p = Json.fromJson(json, Packet.class);
-                        System.out.println("incoming move: " + "x:" + p.pos.x + " position y:" + p.pos.y);
-
-                        //place user's counter-move
-                        m.setBoardVal(p.pos.y, p.pos.x, 1); //1 for opponent, the backend does NOT check if the row/range is legal
+                        System.out.println("Incoming move: " + "x:" + p.pos.x + " position y:" + p.pos.y);
 
                         Packet response = new Packet();
                         response.pos = new Packet.Position();
 
-                        if (m.getGameState() == 1 || m.getGameState() == 3) {
-                            response.status = m.getGameState();
+                        //place user's move, compute AI's move and check game state
+                        Move aiMove = m.getMove(new Move(p.pos.y, p.pos.x),0);
+                        response.status = m.getGameState(); //0 for continue, 1 for opponent win, 2 for AI win, 3 for tie
+
+                        if (response.status == 1 || response.status == 3) {
                             System.out.printf("game ends, status:%d\n", response.status);
                         } else {
-                            //get response of moku AI (counter already placed)
-                            response.pos = new Packet.Position();
-                            int[] choice = m.getMokuChoice(3); //depth>0, proportional to AI smartness
-                            response.pos.x = choice[1];
-                            response.pos.y = choice[0];
-                            response.color = 0; //-1 for null, 1 for opponent, 0 for moku
-                            response.status = m.getGameState(); //0 for continue, 1 for opponent win, 2 for moku win, 3 for tie
+                            //get response of AI
+                            response.pos.x = aiMove.col;
+                            response.pos.y = aiMove.row;
+                            response.color = 0; //-1 for null, 1 for opponent, 0 for AI
+
+                            this.oppoFinalCount++;
 
                             System.out.println("computer's move: x:" + response.pos.x + " y: " + response.pos.y);
                         }
@@ -94,22 +99,21 @@ public class WebsocketActor extends AbstractActor {
                         }
                     } else if (name != null) {    //contains initial name
                         System.out.println("New player name: " + name);
+                        this.oppoName = name;
 
-                        //create new game
-                        this.m = new MokuGoGame(name);
+                        //create new game, computer play black, size is 15x15, max time per move is 30s
+                        this.m = new NegamaxPlayer();
+                        m.setupGame(1,15,30000,0);
 
-                        //initialize first placement of moku
-                        int firstX = 7;
-                        int firstY = 7;
-                        m.setBoardVal(firstX, firstY, 0); //-1 for null, 1 for opponent, 0 for moku
+                        //initialize first placement of black stone
+                        Move initMove = m.beginGame(0);
 
-                        //send back first placement of moku
                         Packet response = new Packet();
                         response.pos = new Packet.Position();
-                        response.pos.x = firstX;
-                        response.pos.y = firstY;
-                        response.color = 0; //-1 for null, 1 for opponent, 0 for moku
-                        response.status = m.getGameState(); //0 for continue, 1 for opponnent win, 2 for moku win, 3 for tie
+                        response.pos.x = initMove.col;
+                        response.pos.y = initMove.row;
+                        response.color = 0; //-1 for null, 1 for opponent, 0 for computer
+                        response.status = m.getGameState(); //0 for continue, 1 for opponent win, 2 for computer win, 3 for tie
 
                         JsonNode responseJson = Json.toJson(response);
                         out.tell(responseJson, self());

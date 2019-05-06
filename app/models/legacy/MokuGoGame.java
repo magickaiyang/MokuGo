@@ -1,4 +1,4 @@
-package actors;
+package models.legacy;
 
 import java.util.Collections;
 import java.lang.Math;

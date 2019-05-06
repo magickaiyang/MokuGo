@@ -1,7 +1,7 @@
 name := """mokugo"""
 organization := "com.reprincipia"
 
-version := "1.1"
+version := "2.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 

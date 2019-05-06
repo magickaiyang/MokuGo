@@ -123,7 +123,7 @@ var drawChessBoard = function(){
 
 //keep connected
 function keepAlive() {
-		var timeout = 10000;
+		var timeout = 30000;
 		var fakeJson = {"a" : 1};
 		if (webSocket.readyState == webSocket.OPEN) {
 				webSocket.send(JSON.stringify(fakeJson));

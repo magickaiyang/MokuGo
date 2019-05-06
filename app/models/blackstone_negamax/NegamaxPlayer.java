@@ -30,10 +30,10 @@ public class NegamaxPlayer implements Player {
         int r = this.state.terminal();
 
         //transform status code to 1 for opponent win, 2 for computer win
-        if (r == 1 && this.state.currentIndex == 1) {
+        if (r == 1 && this.state.currentIndex == 2) {
             r = 2;
         }
-        if (r == 2 && this.state.currentIndex == 1) {
+        if (r == 2 && this.state.currentIndex == 2) {
             r = 1;
         }
 

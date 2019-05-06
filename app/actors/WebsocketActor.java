@@ -42,11 +42,17 @@ public class WebsocketActor extends AbstractActor {
         return Props.create(WebsocketActor.class, out);
     }
 
-    private void updateLeaderboard() throws SQLException {
+    private void updateLeaderboard(boolean isWin) throws SQLException {
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         Connection conn = DriverManager.getConnection(dbUrl);
         PreparedStatement pst = conn.prepareStatement("INSERT INTO leaderboard (\"user\",\"score\") VALUES (?, ?) " +
             "ON CONFLICT (\"user\") DO UPDATE SET score = EXCLUDED.score WHERE EXCLUDED.score > leaderboard.score;");
+
+        if (isWin) { //when the user wins, the lower the stone count, the better
+            this.oppoFinalCount = 1000 - this.oppoFinalCount;
+            System.out.printf("The user won, count = %d\n", this.oppoFinalCount);
+        }
+
         pst.setString(1, this.oppoName);
         pst.setInt(2, this.oppoFinalCount);
         int rowsUpdated = pst.executeUpdate();
@@ -86,7 +92,7 @@ public class WebsocketActor extends AbstractActor {
 
                         if (response.status != 0) { //game has ended
                             System.out.printf("game ends, status:%d\n", response.status);
-                            updateLeaderboard();
+                            updateLeaderboard(response.status == 1);
                             self().tell(PoisonPill.getInstance(), self());  //terminate connection
                         } else {
                             this.oppoFinalCount++;

@@ -10,10 +10,6 @@ import models.Player;
  * Negamax player, with alpha-beta pruning and further optimisations
  */
 public class NegamaxPlayer implements Player {
-
-//    private static final Logger LOGGER =
-//            LogManager.getLogger(NegamaxPlayer.class.getName());
-
     private long timeNanos;
     private long startTime;
 
@@ -32,8 +28,7 @@ public class NegamaxPlayer implements Player {
         //transform status code to 1 for opponent win, 2 for computer win
         if (r == 1 && this.state.currentIndex == 2) {
             r = 2;
-        }
-        else if (r == 2 && this.state.currentIndex == 1) {
+        } else if (r == 2 && this.state.currentIndex == 1) {
             r = 1;
         }
 
@@ -264,13 +259,11 @@ public class NegamaxPlayer implements Player {
         if (totalNodeCount > 0) {
             long duration = (System.nanoTime() - startTime) / 1000000;
             double nodesPerMs = totalNodeCount / (duration > 0 ? duration : 1);
-            double avgBranches = (double) branchesExploredSum / (double)
-                nonLeafCount;
-//            LOGGER.info("Time: {}ms", duration);
-//            LOGGER.info( "Nodes: {}", totalNodeCount);
-//            LOGGER.info("Nodes/ms: {}", nodesPerMs);
-//            LOGGER.info("Branches explored (avg): {} ",
-//                    String.format("%.2f", avgBranches));
+            double avgBranches = (double) branchesExploredSum / (double) nonLeafCount;
+            System.out.printf("Time: %dms\t\t", duration);
+            System.out.printf("Nodes: %d    \n", totalNodeCount);
+            System.out.printf("Nodes/ms: %.2f\t", nodesPerMs);
+            System.out.printf("Avg Branches Explored : %.2f\n", avgBranches);
         }
     }
 
@@ -279,9 +272,7 @@ public class NegamaxPlayer implements Player {
      * searched, and the evaluation score.
      */
     private void printSearchInfo(Move bestMove, int score, int depth) {
-        String moveAlgebraic = bestMove.getAlgebraicString(size);
-//        LOGGER.info("Depth: {}, Evaluation: {}, Best move: {}", depth, score,
-//                moveAlgebraic);
+        System.out.printf("Depth: %d\tScore: %d\tBest move (x,y): (%d,%d)\n", depth, score, bestMove.col, bestMove.row);
     }
 
     @Override
@@ -330,13 +321,7 @@ public class NegamaxPlayer implements Player {
         this.nonLeafCount = 0;
         this.branchesExploredSum = 0;
 
-//        // Create a new internal state object, sync with the game state
-//        this.state = new State(size);
-//        moves.forEach((move) -> {
-//            state.makeMove(move);
-//        });
-
-        // Run a depth increasing search
+        // Run a depth increasing search, max depth is 7
         Move best = iterativeDeepening(2, 7);
         printPerformanceInfo();
         return best;

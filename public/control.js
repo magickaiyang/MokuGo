@@ -98,7 +98,7 @@ webSocket.onmessage = function (event) {
             oneStep(x, y, me);
         }
         //need to wait until drawing is complete
-        setTimeout(delayedAIWin, 0);
+        setTimeout(delayedAIWin, 100);
 
         over = true;
     } else {

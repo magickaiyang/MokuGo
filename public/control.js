@@ -14,18 +14,25 @@ function createPat() {
     var bg = context.createPattern(imgs, "no-repeat");
     context.fillStyle = bg;
     context.fillRect(0, 0, chess.width, chess.height);
+    //draw the chess board
+    context.strokeStyle = "#000000";
+    for (var i = 0; i < 15; i++) {
+        context.moveTo(15 + i * 30, 15);
+        context.lineTo(15 + i * 30, 435);
+        context.stroke();
+        context.moveTo(15, 15 + i * 30);
+        context.lineTo(435, 15 + i * 30);
+        context.stroke();
+    }
 }
-
-
-context.strokeStyle = "#000000";
 
 document.getElementById("restart").onclick = function () {
-    window.location.reload(true);
-}
+    location.reload();
+};
 
 document.getElementById("rank").onclick = function () {
     window.location.href = '/assets/rank.html?' + username;
-}
+};
 
 // Initialize chessBoard
 for (var i = 0; i < 15; i++) {
@@ -35,8 +42,21 @@ for (var i = 0; i < 15; i++) {
     }
 }
 
-//send and get json
-var webSocket = new WebSocket('wss://' + location.host + '/ws');
+//opens a WebSocket
+var webSocket = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + location.host + '/ws');
+username = window.location.search.substr(1);
+var msg = {
+    "name": username
+};
+console.log(username);
+
+// Send the msg object as a JSON-formatted string.
+webSocket.addEventListener('open', function () {
+    webSocket.send(JSON.stringify(msg))
+});
+webSocket.addEventListener('open', function () {
+    keepAlive()
+});
 
 //send json package
 function sendText(x, y, status, color) {
@@ -95,33 +115,6 @@ webSocket.onmessage = function (event) {
     }
 };
 
-//draw the board when onload
-var drawChessBoard = function () {
-    for (var i = 0; i < 15; i++) {
-        context.moveTo(15 + i * 30, 15);
-        context.lineTo(15 + i * 30, 435);
-        context.stroke();
-        context.moveTo(15, 15 + i * 30);
-        context.lineTo(435, 15 + i * 30);
-        context.stroke();
-    }
-    username = window.location.search.substr(1);
-    var msg = {
-        "name": username
-    };
-
-    console.log(username);
-    // Send the msg object as a JSON-formatted string.
-    webSocket.addEventListener('open', function () {
-        webSocket.send(JSON.stringify(msg))
-    });
-
-    webSocket.addEventListener('open', function () {
-        keepAlive()
-    });
-
-}
-
 //keep connected
 function keepAlive() {
     var timeout = 30000;
@@ -130,8 +123,6 @@ function keepAlive() {
         webSocket.send(JSON.stringify(fakeJson));
     }
     setTimeout(keepAlive, timeout);
-
-
 }
 
 //One step when user click the board

@@ -43,8 +43,8 @@
         .restart > span {
             display: inline-block;
             padding: 10px 20px;
-            color: #fff;
-            background-color: #45c01a;
+            color: #ff03b6;
+            background-color: #abbfc0;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -81,7 +81,7 @@
             margin-left: auto;
             width: 20px;
             height: 20px;
-            background-color: #FF0;
+            background-color: #000000;
             border-radius: 50%;
             box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 12px;
             animation: blinkYellow 1s infinite;
@@ -89,13 +89,38 @@
 
         @keyframes blinkYellow {
             from { background-color: #FF0; }
-            50% { background-color: #AA0; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 0; }
+            50% { background-color: #ffffff; box-shadow: none }
             to { background-color: #FF0; }
+        }
+
+        .led-red {
+            margin-left: auto;
+            width: 20px;
+            height: 20px;
+            background-color: #F00;
+            border-radius: 50%;
+            box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+        }
+
+        .led-green {
+            margin: auto;
+            width: 20px;
+            height: 20px;
+            background-color: #ABFF00;
+            border-radius: 50%;
+            box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
         }
 
         .log-box {
             margin-top: 2em;
             border: 3px solid lightskyblue;
+        }
+
+        textarea:disabled {
+            color: initial;
+            cursor: default;
+            background-color: initial;
+            font-size: 14pt;
         }
 
         label {
@@ -109,8 +134,8 @@
 <section>
     <div class="stats">
         <div class="led-box">
-            <div class="led-yellow"></div>
-            <p>Yellow LED</p>
+            <div id="led" class="led-red"></div>
+            <p id="led-text">Disconnected</p>
         </div>
 
         <div class="log-box">

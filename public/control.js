@@ -50,13 +50,21 @@ var msg = {
 };
 console.log(username);
 
-// Send the msg object as a JSON-formatted string.
 webSocket.addEventListener('open', function () {
-    webSocket.send(JSON.stringify(msg))
-});
-webSocket.addEventListener('open', function () {
+    webSocket.send(JSON.stringify(msg));    // Sends the msg object as a JSON-formatted string
+    document.getElementById("led").className = "led-green"; //indicates successful connection
+    document.getElementById("led-text").textContent = "Connected";
     keepAlive()
 });
+
+function lostConnection() {
+    document.getElementById("led").className = "led-red"; //indicates connection lost
+    document.getElementById("led-text").textContent = "Disconnected";
+    clickForbidden = true;
+}
+
+webSocket.addEventListener('close', lostConnection);
+webSocket.addEventListener('error', lostConnection);
 
 //send json package
 function sendText(x, y, status, color) {
@@ -90,7 +98,7 @@ webSocket.onmessage = function (event) {
     var y = msg.pos.y;
 
     //updates statistics
-    if('log' in msg) {
+    if ('log' in msg) {
         document.getElementById("log").value = msg.log;
     }
 
@@ -109,12 +117,18 @@ webSocket.onmessage = function (event) {
 
         over = true;
     } else {
+        //game continues
         if (chessBoard[x][y] == 0) {
             chessBoard[x][y] = 1;
             oneStep(x, y, me);
         }
+
+        document.getElementById("led").className = "led-green"; //indicates connection lost
+        document.getElementById("led-text").textContent = "Connected";
+
         clickForbidden = false;
     }
+
     if (!over) {
         me = !me;
     } else {
@@ -168,7 +182,9 @@ chess.onclick = function (e) {
             me = !me;
         }
         clickForbidden = true;
-        //console.log(clickForbidden);
+
+        document.getElementById("led").className = "led-yellow"; //indicates waiting for response
+        document.getElementById("led-text").textContent = "Waiting";
     }
 }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139646755-1"></script>
@@ -14,9 +15,12 @@
 
         gtag('config', 'UA-139646755-1');
     </script>
+
     <meta charset="utf-8"/>
-    <title>MokuGo Game</title>
-    <style type="text/css">
+
+    <title>MokuGo</title>
+
+    <style>
         canvas {
             display: block;
             margin: 50px auto;
@@ -40,20 +44,44 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        .stats {
+            grid-column-start: 1;
+            margin-left:auto;
+        }
+
+        #board {
+            grid-column-start: 2;
+        }
+
+        section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-column-gap: 10px;
+            justify-items: center;
+            align-items: center ;
+        }
     </style>
 </head>
+
 <body>
-<div id='board'>
-    <canvas id="chess" width="450px" height="450px"></canvas>
-    <div id="center">
-        <div id='restart' class="restart">
-            <span>Restart</span>
-        </div>
-        <div id='rank' class="restart">
-            <span>Rank</span>
+<section>
+    <div class="stats">
+        <p>Hello world!</p>
+    </div>
+
+    <div id='board'>
+        <canvas id="chess" width="450px" height="450px"></canvas>
+        <div id="center">
+            <div id='restart' class="restart">
+                <span>Restart</span>
+            </div>
+            <div id='rank' class="restart">
+                <span>Rank</span>
+            </div>
         </div>
     </div>
-</div>
+</section>
 
 <script src="/assets/control.js"></script>
 </body>

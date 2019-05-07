@@ -21,6 +21,8 @@ public class NegamaxPlayer implements Player {
     private int size;
     private List<Move> moves;
 
+    public String mostRecentLog;
+
     @Override
     public int getGameState() {
         int r = this.state.terminal();
@@ -260,10 +262,11 @@ public class NegamaxPlayer implements Player {
             long duration = (System.nanoTime() - startTime) / 1000000;
             double nodesPerMs = totalNodeCount / (duration > 0 ? duration : 1);
             double avgBranches = (double) branchesExploredSum / (double) nonLeafCount;
-            System.out.printf("Time: %dms\t\t", duration);
-            System.out.printf("Nodes: %d    \n", totalNodeCount);
-            System.out.printf("Nodes/ms: %.2f\t", nodesPerMs);
-            System.out.printf("Avg Branches Explored : %.2f\n", avgBranches);
+            String r = String.format("Time: %dms\nNodes: %d\nNodes/ms: %.2f\nAvg Branches Explored : %.2f",
+                duration, totalNodeCount, nodesPerMs, avgBranches);
+
+            this.mostRecentLog = r;
+            System.out.println(r);
         }
     }
 

@@ -6,6 +6,7 @@ import models.blackstone_negamax.NegamaxPlayer;
 
 import play.libs.Json;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import akka.actor.*;
 
 import java.sql.*;
@@ -88,6 +89,10 @@ public class WebsocketActor extends AbstractActor {
                         response.pos.y = aiMove.row;
                         response.color = 0; //-1 for null, 1 for opponent, 0 for AI
                         JsonNode responseJson = Json.toJson(response);
+
+                        //includes some statistics
+                        ((ObjectNode)responseJson).put("log",((NegamaxPlayer)this.m).mostRecentLog);
+
                         out.tell(responseJson, self());
 
                         if (response.status != 0) { //game has ended

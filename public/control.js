@@ -82,11 +82,18 @@ webSocket.onmessage = function (event) {
     if (String(event.data) == "\"keep-alive\"") {
         return;
     }
+
     var msg = JSON.parse(event.data);
     var status = msg.status;
     var color = msg.color;
     var x = msg.pos.x;
     var y = msg.pos.y;
+
+    //updates statistics
+    if('log' in msg) {
+        document.getElementById("log").value = msg.log;
+    }
+
     if (status == 1) {
         //user win
         alert("You win!\nClick \"Rank\" to see the world rank and your score\nOr click \"Restart\" to try again");

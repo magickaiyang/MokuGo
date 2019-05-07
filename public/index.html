@@ -21,6 +21,10 @@
     <title>MokuGo</title>
 
     <style>
+        body {
+            font-size: large;
+        }
+
         canvas {
             display: block;
             margin: 50px auto;
@@ -61,13 +65,58 @@
             justify-items: center;
             align-items: center ;
         }
+
+        .led-box {
+            display:flex;
+        }
+
+        .led-box p {
+            margin-block-start: 0em;
+            margin-block-end: 0em;
+            margin-left: 1em;
+            margin-right: auto;
+        }
+
+        .led-yellow {
+            margin-left: auto;
+            width: 20px;
+            height: 20px;
+            background-color: #FF0;
+            border-radius: 50%;
+            box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 12px;
+            animation: blinkYellow 1s infinite;
+        }
+
+        @keyframes blinkYellow {
+            from { background-color: #FF0; }
+            50% { background-color: #AA0; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 0; }
+            to { background-color: #FF0; }
+        }
+
+        .log-box {
+            margin-top: 2em;
+            border: 3px solid lightskyblue;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
 <section>
     <div class="stats">
-        <p>Hello world!</p>
+        <div class="led-box">
+            <div class="led-yellow"></div>
+            <p>Yellow LED</p>
+        </div>
+
+        <div class="log-box">
+            <label for="log">Server Statistics:</label>
+                <textarea id="log" name="log" rows="4" cols="30" disabled="disabled">Not Available</textarea>
+        </div>
     </div>
 
     <div id='board'>

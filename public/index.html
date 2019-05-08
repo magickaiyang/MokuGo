@@ -67,7 +67,11 @@
         }
 
         .led-box {
-            display:flex;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-column-gap: 10px;
+            justify-items: center;
+            align-items: center ;
         }
 
         .led-box p {
@@ -103,7 +107,7 @@
         }
 
         .led-green {
-            margin: auto;
+            margin-left: auto;
             width: 20px;
             height: 20px;
             background-color: #ABFF00;
@@ -123,9 +127,21 @@
             font-size: 14pt;
         }
 
-        label {
+        .log-box-label {
             display: block;
             margin-bottom: 10px;
+        }
+
+        .score-box {
+            margin-top: 2em;
+            text-align: center;
+            line-height: 2em;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            grid-column-gap: 10px;
+            justify-items: center;
+            align-items: center ;
         }
     </style>
 </head>
@@ -139,8 +155,15 @@
         </div>
 
         <div class="log-box">
-            <label for="log">Server Statistics:</label>
+            <label class="log-box-label" for="log">Server Statistics:</label>
                 <textarea id="log" name="log" rows="4" cols="30" disabled="disabled">Not Available</textarea>
+        </div>
+
+        <div class="score-box">
+            <label>Highest Score:</label>
+            <span>999</span>
+            <label>Current Score:</label>
+            <span id="score-num">0</span>
         </div>
     </div>
 

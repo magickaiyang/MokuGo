@@ -5,6 +5,7 @@ var clickForbidden = false;
 var chess = document.getElementById('chess');
 var context = chess.getContext('2d');
 var username;
+var count = 0;
 //Background 
 var imgs = new Image();
 imgs.src = "/assets/wood2.jpg";
@@ -175,16 +176,21 @@ chess.onclick = function (e) {
     if (chessBoard[i][j] == 0) {
         oneStep(i, j, me);
         chessBoard[i][j] = 1;//me
+
         //send json to server
         sendText(i, j, 0, 1);
+
+        count++;
 
         if (!over) {
             me = !me;
         }
+
         clickForbidden = true;
 
         document.getElementById("led").className = "led-yellow"; //indicates waiting for response
         document.getElementById("led-text").textContent = "Waiting";
+        document.getElementById("score-num").textContent = count.toString();
     }
 }
 

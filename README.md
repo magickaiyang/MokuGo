@@ -1,5 +1,5 @@
 # MokuGo
-Play Gomoku with a 1-year-old computer program, and compete for positions on the leaderboard!
+Play Gomoku with award-winning AIs, and compete for positions on the leaderboard!
 
 ----------------------------
 

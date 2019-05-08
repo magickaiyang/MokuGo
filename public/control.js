@@ -4,7 +4,6 @@ var over = false; // game over or not
 var clickForbidden = false;
 var chess = document.getElementById('chess');
 var context = chess.getContext('2d');
-var username;
 var count = 0;
 //Background 
 var imgs = new Image();
@@ -32,7 +31,7 @@ document.getElementById("restart").onclick = function () {
 };
 
 document.getElementById("rank").onclick = function () {
-    window.location.href = '/assets/rank.html?' + username;
+    window.location.href = '/ldrbrd?username=' + username;
 };
 
 // Initialize chessBoard
@@ -45,7 +44,9 @@ for (var i = 0; i < 15; i++) {
 
 //opens a WebSocket
 var webSocket = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + location.host + '/ws');
-username = window.location.search.substr(1);
+
+const urlParams = new URLSearchParams(window.location.search);
+const username = urlParams.get('username');
 var msg = {
     "name": username
 };
@@ -192,7 +193,7 @@ chess.onclick = function (e) {
         document.getElementById("led-text").textContent = "Waiting";
         document.getElementById("score-num").textContent = count.toString();
     }
-}
+};
 
 
 

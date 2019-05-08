@@ -1,0 +1,131 @@
+body {
+    font-size: large;
+}
+
+canvas {
+    display: block;
+    margin: 50px auto;
+    box-shadow: -2px -2px 2px #efefef, 5px 5px 5px #b9b9b9;
+    cursor: pointer;
+}
+
+#center {
+    text-align: center;
+}
+
+#center > div {
+    display: inline-block;
+}
+
+.restart > span {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #ff03b6;
+    background-color: #abbfc0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.stats {
+    grid-column-start: 1;
+    margin-left: auto;
+}
+
+#board {
+    grid-column-start: 2;
+}
+
+section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.led-box {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-column-gap: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.led-box p {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-left: 1em;
+    margin-right: auto;
+}
+
+.led-yellow {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    background-color: #000000;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 12px;
+    animation: blinkYellow 1s infinite;
+}
+
+@keyframes blinkYellow {
+    from {
+        background-color: #FF0;
+    }
+    50% {
+        background-color: #ffffff;
+        box-shadow: none
+    }
+    to {
+        background-color: #FF0;
+    }
+}
+
+.led-red {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    background-color: #F00;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+}
+
+.led-green {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    background-color: #ABFF00;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
+}
+
+.log-box {
+    margin-top: 2em;
+    border: 3px solid lightskyblue;
+    align:center;
+}
+
+textarea:disabled {
+    color: initial;
+    cursor: default;
+    background-color: initial;
+    font-size: 14pt;
+    text-align:center;
+}
+
+.log-box-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.score-box {
+    margin-top: 2em;
+    text-align: center;
+    line-height: 2em;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-column-gap: 10px;
+    justify-items: center;
+    align-items: center;
+}

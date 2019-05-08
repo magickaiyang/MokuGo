@@ -1,0 +1,63 @@
+@(user: String, score: Integer)
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139646755-1"></script>
+    <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+            gtag('config', 'UA-139646755-1');
+    </script>
+
+    <meta charset="utf-8"/>
+
+    <title>MokuGo</title>
+
+    <link href="/assets/index.css" rel="stylesheet"/>
+  </head>
+
+  <body>
+    <section>
+      <div class="stats">
+        <div class="led-box">
+          <div id="led" class="led-red"></div>
+          <p id="led-text">Disconnected</p>
+        </div>
+
+        <div class="log-box">
+          <label class="log-box-label" for="log">Server Statistics:</label>
+          <textarea id="log" name="log" rows="4" cols="30" disabled="disabled">Not Available</textarea>
+        </div>
+
+        <div class="score-box">
+          <label>Highest Score for <i>@user</i>:</label>
+          <span>@score</span>
+          <label>Current Score:</label>
+          <span id="score-num">0</span>
+        </div>
+      </div>
+
+      <div id='board'>
+        <canvas id="chess" width="450px" height="450px"></canvas>
+        <div id="center">
+          <div id='restart' class="restart">
+            <span>Restart</span>
+          </div>
+          <div id='rank' class="restart">
+            <span>Rank</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="/assets/control.js"></script>
+  </body>
+</html>

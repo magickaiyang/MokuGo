@@ -9,7 +9,7 @@ import java.sql.*;
 public class LeaderboardController extends Controller {
     private Connection conn;
 
-    private static class Board {
+    public static class Board {
         public int userscore;
         public int userrank;
         public String username;
@@ -18,10 +18,12 @@ public class LeaderboardController extends Controller {
         public static class Entry {
             public int score;
             public String username;
+            public int pos;
 
-            public Entry(String user, int score) {
+            public Entry(String user, int score, int pos) {
                 this.username = user;
                 this.score = score;
+                this.pos = pos;
             }
         }
 
@@ -45,7 +47,7 @@ public class LeaderboardController extends Controller {
         ResultSet rs = st.executeQuery("SELECT * FROM leaderboard ORDER BY score DESC LIMIT 10");
         int i = 0;
         while (rs.next()) {
-            board.rank[i++] = new Board.Entry(rs.getString("user"), rs.getInt("score"));
+            board.rank[i++] = new Board.Entry(rs.getString("user"), rs.getInt("score"), i);
         }
         rs.close();
         st.close();
@@ -73,7 +75,6 @@ public class LeaderboardController extends Controller {
             pst.close();
         }
 
-        JsonNode responseJson = Json.toJson(board);
-        return ok(responseJson);
+        return ok(views.html.rank.render(board));
     }
 }

@@ -2,12 +2,16 @@
 # This file defines all application routes (Higher priority routes first)
 
 # An asset controller to show home page
-GET  /              controllers.Assets.at(path="/public", file="welcome.html")
+GET  /                      controllers.Assets.at(path="/public", file="welcome.html")
 
-# Other assets (css,js)
-GET  /assets/*file         controllers.Assets.at(path="/public", file)
+# Game page
+GET /index                  controllers.IndexController.index(username: String)
 
-GET  /ws            controllers.WebsocketController.socket
+# Static assets (css,js)
+GET  /assets/*file          controllers.Assets.at(path="/public", file)
 
-# show Leaderboard
-GET  /ldrbrd/:username        controllers.LeaderboardController.get(username: String)
+# WebSocket for game playing
+GET  /ws                    controllers.WebsocketController.socket
+
+# Leaderboard
+GET  /ldrbrd                controllers.LeaderboardController.get(username: String)

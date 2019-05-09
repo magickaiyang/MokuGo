@@ -1,68 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-139646755-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-139646755-1');
     </script>
-    <meta charset="utf-8" />
-	<title>MokuGo Game</title>
-    <style type="text/css">
-        #center{
-		    text-align: center;
-            position: fixed;
-            width: 902px;
-            height: 500px;
-            top: 0px;
-            left: 0px;
-            right: 0px;
-            bottom: 0px;
-            margin: auto;
-		}
-		#center>div{
-			display: inline-block;
-            width: 350px;
-            height: 500px;
-            vertical-align: middle;
-            
-		}
-        #begin{
-            cursor: pointer;
-        }
-        .inB{
-            width: 350px;
-            height: 300px;
-            margin: 100px 0 100px 0;
-        }
-        .inA{
-            width: 350px;
-            height: 85px;
-            margin-top:150px;
-        }
-	</style>
-</head>
-<body>
-    <div id="center">
-        <div id="b">
-            <div class='inB'>
-                <img src="/assets/major.jpg">
-            </div>
-        </div>
-        <div id="a">
-            <div class='inA'>
-                <h1>Welcome to MokuGo</h1>
-                <h2>Please enter your username:</h2>
-                <input id="username" type="text" placeholder="Username" onkeydown="if(event.keyCode==13){begin();return false}">
-                <button id="begin" onclick="begin()">Begin</button>
-            </div>
-        </div>
-    </div>
 
-    <script src="/assets/welcome.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"/>
+
+    <meta charset="utf-8"/>
+    <title>MokuGo</title>
+    <link href="/assets/welcome.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body onload="beginLogin()">
+<section>
+    <img src="/assets/major.jpg" class="left">
+    <div class='right'>
+        <h2>Welcome to MokuGo</h2>
+        <div id="firebaseui-auth-container"></div>
+        <p id="signin-indicator" hidden>null</p>
+    </div>
+</section>
+
+<script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-auth.js"></script>
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyASe2NlTPzXYVEkjXpR_-SRxx8-0zaXzfc",
+        authDomain: "mokugo-firebase.firebaseapp.com",
+        databaseURL: "https://mokugo-firebase.firebaseio.com",
+        projectId: "mokugo-firebase",
+        storageBucket: "mokugo-firebase.appspot.com",
+        messagingSenderId: "926330483640",
+        appId: "1:926330483640:web:832d5d68daa518ce"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+</script>
+
+<script src="/assets/welcome.js"></script>
+
 </body>
 </html>

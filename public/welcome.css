@@ -1,0 +1,29 @@
+section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+    justify-items: center;
+    align-items: center;
+    margin: 0;
+    height: 100%;
+}
+
+.left {
+    margin-left: auto;
+    padding: 2em;
+}
+
+.right {
+    margin-right: auto;
+    padding: 2em;
+}
+
+#signin-indicator {
+    text-align: center;
+    margin-block-start: 4em;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+}

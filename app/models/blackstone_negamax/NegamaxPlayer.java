@@ -324,8 +324,8 @@ public class NegamaxPlayer implements Player {
         this.nonLeafCount = 0;
         this.branchesExploredSum = 0;
 
-        // Run a depth increasing search, max depth is 7
-        Move best = iterativeDeepening(2, 7);
+        // Run a depth increasing search, max depth is 8
+        Move best = iterativeDeepening(2, 8);
         printPerformanceInfo();
         return best;
     }

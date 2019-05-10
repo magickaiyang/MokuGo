@@ -45,8 +45,7 @@ for (var i = 0; i < 15; i++) {
 //opens a WebSocket
 var webSocket = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + location.host + '/ws');
 
-const urlParams = new URLSearchParams(window.location.search);
-const username = urlParams.get('username');
+const username = document.getElementById('username').textContent;
 var msg = {
     "name": username
 };

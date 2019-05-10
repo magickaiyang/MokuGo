@@ -4,8 +4,11 @@
 # An asset controller to show home page
 GET  /                      controllers.Assets.at(path="/public", file="welcome.html")
 
+# favicon
+GET /favicon.ico	    controllers.Assets.at(path="/public", file="favicon.ico")
+
 # Game page
-GET /index                  controllers.IndexController.index(username: String)
+GET /index                  controllers.IndexController.index(token: String)
 
 # Static assets (css,js)
 GET  /assets/*file          controllers.Assets.at(path="/public", file)

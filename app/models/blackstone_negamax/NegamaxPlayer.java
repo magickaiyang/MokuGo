@@ -143,9 +143,9 @@ public class NegamaxPlayer implements Player {
         }
 
         // Sort based on move score
-        //Collections.sort(scoredMoves);
-        // sort in parallel
-        scoredMoves = scoredMoves.parallelStream().sorted().collect(Collectors.toList());
+        Collections.sort(scoredMoves);
+        // sort in parallel, tested and lowers performance!
+        //scoredMoves = scoredMoves.parallelStream().sorted().collect(Collectors.toList());
 
         List<Move> moves = new ArrayList<Move>();
         scoredMoves.forEach(move -> {

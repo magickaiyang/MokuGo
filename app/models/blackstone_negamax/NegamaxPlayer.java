@@ -230,7 +230,7 @@ public class NegamaxPlayer implements Player {
         printSearchInfo(scoredMoves.get(0).move, scoredMoves.get(0).score,
             depth);
 
-        moves.clear();
+        moves = new ArrayList<Move>();
         for (ScoredMove move : scoredMoves) moves.add(move.move);
         return moves;
     }

@@ -3,6 +3,7 @@ package models.blackstone_negamax;
 import models.Move;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import models.Player;
 
@@ -129,7 +130,6 @@ public class NegamaxPlayer implements Player {
         List<ScoredMove> scoredMoves = new ArrayList<>();
 
         // Grab closest moves
-        List<Move> moves = new ArrayList<>();
         for (int i = 0; i < state.board.length; i++) {
             for (int j = 0; j < state.board.length; j++) {
                 if (state.board[i][j].index == 0) {
@@ -143,10 +143,14 @@ public class NegamaxPlayer implements Player {
         }
 
         // Sort based on move score
-        Collections.sort(scoredMoves);
-        for (ScoredMove move : scoredMoves) {
-            moves.add(move.move);
-        }
+        //Collections.sort(scoredMoves);
+        // sort in parallel
+        scoredMoves = scoredMoves.parallelStream().sorted().collect(Collectors.toList());
+
+        List<Move> moves = new ArrayList<Move>();
+        scoredMoves.forEach(move -> {
+            moves.add(move.move);        
+        });
         return moves;
     }
 

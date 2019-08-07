@@ -3,7 +3,7 @@ package models.blackstone_negamax;
 import models.Move;
 
 import java.util.*;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 import models.Player;
 
@@ -128,26 +128,23 @@ public class NegamaxPlayer implements Player {
         }
 
         List<ScoredMove> scoredMoves = new ArrayList<>();
-        // Thread-safe view of the list
-        List<ScoredMove> scoredMovesSync = Collections.synchronizedList(scoredMoves);
 
-        // Paralleled
         // Grab closest moves
-        IntStream.range(0, state.board.length).parallel().forEach(i -> {
+        for (int i = 0; i < state.board.length; i++) {
             for (int j = 0; j < state.board.length; j++) {
                 if (state.board[i][j].index == 0) {
                     if (state.hasAdjacent(i, j, 2)) {
                         int score = Evaluator.evaluateField(state, i, j,
                             state.currentIndex);
-                        scoredMovesSync.add(new ScoredMove(new Move(i, j), score));
+                        scoredMoves.add(new ScoredMove(new Move(i, j), score));
                     }
                 }
             }
-        });
+        }
 
         // Sort based on move score
         Collections.sort(scoredMoves);
-        // Sort in parallel, tested and lowers performance!
+        // sort in parallel, tested and lowers performance!
         //scoredMoves = scoredMoves.parallelStream().sorted().collect(Collectors.toList());
 
         List<Move> moves = new ArrayList<Move>();
